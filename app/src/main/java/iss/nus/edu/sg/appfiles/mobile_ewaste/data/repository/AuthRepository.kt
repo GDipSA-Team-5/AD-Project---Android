@@ -1,0 +1,13 @@
+package iss.nus.edu.sg.appfiles.mobile_ewaste.data.repository
+
+import iss.nus.edu.sg.appfiles.mobile_ewaste.network.AuthApi
+import iss.nus.edu.sg.appfiles.mobile_ewaste.network.model.LoginRequest
+import iss.nus.edu.sg.appfiles.mobile_ewaste.network.model.LoginResponse
+import iss.nus.edu.sg.appfiles.mobile_ewaste.network.model.RegisterRequest
+import iss.nus.edu.sg.appfiles.mobile_ewaste.network.model.RegisterResponse
+
+class AuthRepository(private val authApi: AuthApi) {
+    suspend fun login(request: LoginRequest): LoginResponse = authApi.login(request)
+
+    suspend fun register(request: RegisterRequest): RegisterResponse = authApi.register(request)
+}

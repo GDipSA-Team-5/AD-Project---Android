@@ -38,7 +38,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Hello, John!"
-                        android:textColor="#1F2A37"
+        android:textColor="@color/text_primary"
                         android:textSize="27sp"
                         android:textStyle="bold" />
 
@@ -48,7 +48,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:text="Let's make a difference today"
-                        android:textColor="#6B7280"
+        android:textColor="@color/text_secondary"
                         android:textSize="18sp" />
 
                 </LinearLayout>
@@ -62,7 +62,7 @@
                     android:paddingEnd="16dp"
                     android:text="Logout"
                     android:textAllCaps="false"
-                    android:textColor="#2FAE66"
+        android:textColor="@color/brand_green"
                     android:textSize="16sp" />
 
             </LinearLayout>
@@ -196,13 +196,14 @@
                 android:layout_marginTop="12dp"
                 android:orientation="horizontal">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0dp"
-                    android:layout_height="100dp"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="10dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="1dp">
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/quickActionFindBins"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="10dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -227,12 +228,13 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0dp"
-                    android:layout_height="100dp"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="1dp">
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/quickActionLogDisposal"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -265,13 +267,14 @@
                 android:layout_marginTop="12dp"
                 android:orientation="horizontal">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0dp"
-                    android:layout_height="100dp"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="10dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="1dp">
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/quickActionGuidelines"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="10dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -296,12 +299,13 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0dp"
-                    android:layout_height="100dp"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="1dp">
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/quickActionRedeem"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"

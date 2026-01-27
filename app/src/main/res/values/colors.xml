@@ -2,4 +2,21 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="app_background">#F6F7F9</color>
+    <color name="text_primary">#1F2A37</color>
+    <color name="text_secondary">#6B7280</color>
+    <color name="text_label">#374151</color>
+    <color name="text_input">#111827</color>
+    <color name="text_hint">#9CA3AF</color>
+    <color name="brand_green">#2FAE66</color>
+    <color name="brand_green_light">#36C86F</color>
+    <color name="brand_green_fill">#33B66B</color>
+    <color name="input_bg">#FFFFFF</color>
+    <color name="input_border">#D7DCE2</color>
+    <color name="chip_bg">#DFF6E8</color>
+    <color name="circle_green">#36C06E</color>
+    <color name="circle_green_light">#E6F7EC</color>
+    <color name="circle_blue_light">#E1ECFF</color>
+    <color name="circle_purple_light">#EFE6FF</color>
+    <color name="map_placeholder">#E9ECEF</color>
 </resources>
