@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6F7F9">
+    android:background="@color/app_background">
 
     <LinearLayout
         android:id="@+id/loginContainer"
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Welcome Back"
-            android:textColor="#1F2A37"
+        android:textColor="@color/text_primary"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:text="Login to continue recycling"
-            android:textColor="#6B7280"
+        android:textColor="@color/text_secondary"
             android:textSize="16sp" />
 
         <TextView
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="Email"
-            android:textColor="#374151"
+        android:textColor="@color/text_label"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -62,15 +62,15 @@
             android:inputType="textEmailAddress"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:textColor="#111827"
-            android:textColorHint="#9CA3AF" />
+        android:textColor="@color/text_input"
+        android:textColorHint="@color/text_hint" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
             android:text="Password"
-            android:textColor="#374151"
+        android:textColor="@color/text_label"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -84,8 +84,8 @@
             android:inputType="textPassword"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:textColor="#111827"
-            android:textColorHint="#9CA3AF" />
+        android:textColor="@color/text_input"
+        android:textColorHint="@color/text_hint" />
 
         <TextView
             android:id="@+id/forgotPassword"
@@ -93,7 +93,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:text="Forgot Password?"
-            android:textColor="#2FAE66"
+        android:textColor="@color/brand_green"
             android:textSize="16sp" />
 
         <Button
@@ -104,7 +104,7 @@
             android:background="@drawable/bg_button"
             android:text="Login"
             android:textAllCaps="false"
-            android:textColor="#FFFFFF"
+        android:textColor="@color/white"
             android:textSize="19sp" />
 
         <TextView
@@ -113,7 +113,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Don't have an account? Register"
-            android:textColor="#2FAE66"
+        android:textColor="@color/brand_green"
             android:textSize="16sp" />
 
     </LinearLayout>

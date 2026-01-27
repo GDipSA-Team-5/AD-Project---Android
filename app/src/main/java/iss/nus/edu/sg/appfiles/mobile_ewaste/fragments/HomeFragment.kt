@@ -18,6 +18,16 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val fragmentBinding = FragmentHomeBinding.bind(view)
         binding = fragmentBinding
 
+        setupLogout(fragmentBinding)
+        setupQuickActions(fragmentBinding)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
+
+    private fun setupLogout(fragmentBinding: FragmentHomeBinding) {
         fragmentBinding.buttonLogout.setOnClickListener {
             SessionManager(requireContext()).clear()
             Toast.makeText(requireContext(), "Logged out", Toast.LENGTH_SHORT).show()
@@ -25,8 +35,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding = null
+    private fun setupQuickActions(fragmentBinding: FragmentHomeBinding) {
+        fragmentBinding.quickActionFindBins.setOnClickListener {
+            findNavController().navigate(R.id.locateFragment)
+        }
+        fragmentBinding.quickActionLogDisposal.setOnClickListener {
+            findNavController().navigate(R.id.disposeFragment)
+        }
+        fragmentBinding.quickActionGuidelines.setOnClickListener {
+            findNavController().navigate(R.id.disposeFragment)
+        }
+        fragmentBinding.quickActionRedeem.setOnClickListener {
+            findNavController().navigate(R.id.rewardsFragment)
+        }
     }
 }

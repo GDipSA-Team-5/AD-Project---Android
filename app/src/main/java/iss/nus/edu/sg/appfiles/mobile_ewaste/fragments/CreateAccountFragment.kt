@@ -6,22 +6,31 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import iss.nus.edu.sg.appfiles.mobile_ewaste.R
 import iss.nus.edu.sg.appfiles.mobile_ewaste.databinding.FragmentCreateAccountBinding
-import iss.nus.edu.sg.appfiles.mobile_ewaste.network.ApiClient
 import iss.nus.edu.sg.appfiles.mobile_ewaste.network.model.RegisterRequest
+import iss.nus.edu.sg.appfiles.mobile_ewaste.ui.auth.AuthUiState
+import iss.nus.edu.sg.appfiles.mobile_ewaste.ui.auth.RegisterEvent
+import iss.nus.edu.sg.appfiles.mobile_ewaste.ui.auth.RegisterViewModel
 import kotlinx.coroutines.launch
 
 class CreateAccountFragment : Fragment(R.layout.fragment_create_account) {
     private var binding: FragmentCreateAccountBinding? = null
+    private lateinit var viewModel: RegisterViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val fragmentBinding = FragmentCreateAccountBinding.bind(view)
         binding = fragmentBinding
+        viewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
+
+        observeState(fragmentBinding)
 
         fragmentBinding.loginLink
             .setOnClickListener { findNavController().navigate(R.id.action_createAccount_to_login) }
@@ -53,32 +62,7 @@ class CreateAccountFragment : Fragment(R.layout.fragment_create_account) {
                     password = password.text.toString(),
                     referralCode = referralValue
                 )
-
-                lifecycleScope.launch {
-                    try {
-                        val response = ApiClient.authApi.register(request)
-                        if (response.success) {
-                            Toast.makeText(
-                                requireContext(),
-                                "Registered successfully",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            findNavController().navigate(R.id.action_createAccount_to_login)
-                        } else {
-                            Toast.makeText(
-                                requireContext(),
-                                response.message,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    } catch (ex: Exception) {
-                        Toast.makeText(
-                            requireContext(),
-                            "Registration failed",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
+                viewModel.register(request)
             }
         }
     }
@@ -86,6 +70,38 @@ class CreateAccountFragment : Fragment(R.layout.fragment_create_account) {
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
+    }
+
+    private fun observeState(fragmentBinding: FragmentCreateAccountBinding) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.state.collect { state ->
+                        renderState(fragmentBinding, state)
+                    }
+                }
+                launch {
+                    viewModel.events.collect { event ->
+                        when (event) {
+                            is RegisterEvent.Success -> {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Registered successfully",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                findNavController().navigate(R.id.action_createAccount_to_login)
+                            }
+                            is RegisterEvent.Error ->
+                                Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun renderState(fragmentBinding: FragmentCreateAccountBinding, state: AuthUiState) {
+        fragmentBinding.buttonCreateAccount.isEnabled = !state.isLoading
     }
 
     private fun validateRequired(input: EditText, message: String): Boolean {
