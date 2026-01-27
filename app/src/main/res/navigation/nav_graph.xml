@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="iss.nus.edu.sg.appfiles.mobile_ewaste.fragments.LoginFragment"
+        android:label="Login">
+        <action
+            android:id="@+id/action_login_to_createAccount"
+            app:destination="@id/createAccountFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_login_to_resetPassword"
+            app:destination="@id/resetPasswordFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_login_to_home"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/createAccountFragment"
+        android:name="iss.nus.edu.sg.appfiles.mobile_ewaste.fragments.CreateAccountFragment"
+        android:label="Create Account">
+        <action
+            android:id="@+id/action_createAccount_to_login"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/resetPasswordFragment"
+        android:name="iss.nus.edu.sg.appfiles.mobile_ewaste.fragments.ResetPasswordFragment"
+        android:label="Reset Password">
+        <action
+            android:id="@+id/action_resetPassword_to_login"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="iss.nus.edu.sg.appfiles.mobile_ewaste.fragments.HomeFragment"
+        android:label="Home">
+        <action
+            android:id="@+id/action_home_to_login"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/locateFragment"
+        android:name="iss.nus.edu.sg.appfiles.mobile_ewaste.fragments.LocateFragment"
+        android:label="Locate" />
+
+    <fragment
+        android:id="@+id/disposeFragment"
+        android:name="iss.nus.edu.sg.appfiles.mobile_ewaste.fragments.DisposeFragment"
+        android:label="Dispose" />
+
+    <fragment
+        android:id="@+id/rewardsFragment"
+        android:name="iss.nus.edu.sg.appfiles.mobile_ewaste.fragments.RewardsFragment"
+        android:label="Rewards" />
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="iss.nus.edu.sg.appfiles.mobile_ewaste.fragments.ProfileFragment"
+        android:label="Profile" />
+
+</navigation>
