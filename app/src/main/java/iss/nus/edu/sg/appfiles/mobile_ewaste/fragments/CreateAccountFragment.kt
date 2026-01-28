@@ -38,29 +38,28 @@ class CreateAccountFragment : Fragment(R.layout.fragment_create_account) {
         val fullName = fragmentBinding.inputFullName
         val email = fragmentBinding.inputEmail
         val phone = fragmentBinding.inputPhone
-        val address = fragmentBinding.inputAddress
+        val regionId = fragmentBinding.inputRegionId
         val password = fragmentBinding.inputPassword
-        val referral = fragmentBinding.inputReferral
 
         fragmentBinding.buttonCreateAccount.setOnClickListener {
             val emailValue = email.text?.toString()?.trim().orEmpty()
-            val referralValue = referral.text?.toString()?.trim().orEmpty().ifEmpty { null }
 
             val valid = validateRequired(fullName, "Full name is required") &&
                 validateRequired(email, "Email is required") &&
                 validateEmail(email, emailValue) &&
                 validateRequired(phone, "Phone is required") &&
-                validateRequired(address, "Address is required") &&
+                validateOptionalInt(regionId, "Region ID must be a number") &&
                 validateRequired(password, "Password is required")
 
             if (valid) {
+                val regionIdValue = regionId.text?.toString()?.trim().orEmpty()
+                val parsedRegionId = regionIdValue.takeIf { it.isNotEmpty() }?.toIntOrNull()
                 val request = RegisterRequest(
                     fullName = fullName.text.toString().trim(),
                     email = emailValue,
                     phone = phone.text.toString().trim(),
-                    address = address.text.toString().trim(),
                     password = password.text.toString(),
-                    referralCode = referralValue
+                    regionId = parsedRegionId
                 )
                 viewModel.register(request)
             }
@@ -118,6 +117,17 @@ class CreateAccountFragment : Fragment(R.layout.fragment_create_account) {
     private fun validateEmail(input: EditText, value: String): Boolean {
         return if (!Patterns.EMAIL_ADDRESS.matcher(value).matches()) {
             input.error = "Invalid email"
+            false
+        } else {
+            input.error = null
+            true
+        }
+    }
+
+    private fun validateOptionalInt(input: EditText, message: String): Boolean {
+        val text = input.text?.toString()?.trim().orEmpty()
+        return if (text.isNotEmpty() && text.toIntOrNull() == null) {
+            input.error = message
             false
         } else {
             input.error = null
