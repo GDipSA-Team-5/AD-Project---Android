@@ -4,7 +4,6 @@ data class RegisterRequest(
     val fullName: String,
     val email: String,
     val phone: String,
-    val address: String,
     val password: String,
-    val referralCode: String?
+    val regionId: Int? = null
 )

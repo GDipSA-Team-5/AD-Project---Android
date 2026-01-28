@@ -109,19 +109,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="Address"
+                android:text="Region ID (Optional)"
         android:textColor="@color/text_label"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/inputAddress"
+                android:id="@+id/inputRegionId"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/bg_input"
-                android:hint="123 Main St, City, State"
-                android:inputType="textPostalAddress"
+                android:hint="e.g. 1"
+                android:inputType="number"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
         android:textColor="@color/text_input"
@@ -144,28 +144,6 @@
                 android:background="@drawable/bg_input"
                 android:hint="••••••••"
                 android:inputType="textPassword"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-        android:textColor="@color/text_input"
-        android:textColorHint="@color/text_hint" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Referral Code (Optional)"
-        android:textColor="@color/text_label"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/inputReferral"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/bg_input"
-                android:hint="Enter referral code"
-                android:inputType="text"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
         android:textColor="@color/text_input"
