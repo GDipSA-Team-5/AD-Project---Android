@@ -1,9 +1,9 @@
 package iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs
 
+import com.google.gson.annotations.SerializedName
+
 data class ItemTypeDto(
-        val itemTypeId: Int,
-        val itemName: String,
-    val estimatedAvgWeight: Double
-){
-    override fun toString(): String = itemName
-    }
+    @SerializedName("itemTypeId") val itemTypeId: Int,
+    @SerializedName("itemName") val itemName: String,
+    @SerializedName("estimatedAvgWeight") val estimatedAvgWeight: Double
+)

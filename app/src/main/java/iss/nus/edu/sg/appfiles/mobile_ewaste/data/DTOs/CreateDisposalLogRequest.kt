@@ -5,5 +5,6 @@ data class CreateDisposalLogRequest(
     val itemTypeId: Int,
     val serialNo: String,
     val estimatedWeightKg: Double,
-    val feedback: String?) {
-}
+    val feedback: String?,
+    val userId: Int
+)
