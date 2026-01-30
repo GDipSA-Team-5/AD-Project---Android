@@ -1,5 +1,8 @@
 package iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs
 
-data class CategoryDto(val categoryId: Int, val categoryName:String) {
-    override fun toString(): String = categoryName
-}
+import com.google.gson.annotations.SerializedName
+
+data class CategoryDto(
+    @SerializedName("categoryId") val categoryId: Int,
+    @SerializedName("categoryName") val categoryName: String
+)

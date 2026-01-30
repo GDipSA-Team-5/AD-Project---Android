@@ -1,8 +1,8 @@
 package iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs
 
-data class BinDto (
-    val binId: Int,
-    val binCode: String
-){
-    override fun toString(): String = binCode
-}
+import com.google.gson.annotations.SerializedName
+
+data class BinDto(
+    @SerializedName("binId") val binId: Int,
+    @SerializedName("locationName") val locationName: String?
+)

@@ -9,18 +9,16 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import iss.nus.edu.sg.appfiles.mobile_ewaste.R
-import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.BinDto
-import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.CategoryDto
-import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.CreateDisposalLogRequest
-import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.ItemTypeDto
+import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.*
+import iss.nus.edu.sg.appfiles.mobile_ewaste.data.SessionManager
 import iss.nus.edu.sg.appfiles.mobile_ewaste.databinding.FragmentDisposeBinding
 import iss.nus.edu.sg.appfiles.mobile_ewaste.network.ApiClient
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 class DisposeFragment : Fragment(R.layout.fragment_dispose) {
+
     private var _binding: FragmentDisposeBinding? = null
     private val binding get() = _binding!!
 
@@ -31,90 +29,90 @@ class DisposeFragment : Fragment(R.layout.fragment_dispose) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentDisposeBinding.bind(view)
+
         setupTimestamp()
-        setupClicks()
-        loadBinsAndCategories()
+        setupButtons()
+        loadInitialData()
     }
 
-    private fun setupTimestamp(){
-        val fmt = SimpleDateFormat("dd MMM yyyy, HH:mm",Locale.getDefault())
+
+    private fun setupTimestamp() {
+        val fmt = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
         binding.etTimestamp.setText(fmt.format(Date()))
     }
 
-    private fun setupClicks(){
+    private fun setupButtons() {
         binding.btnBack.setOnClickListener { goBack() }
         binding.buttonLogDisposal.setOnClickListener { submit() }
     }
 
-    private fun loadBinsAndCategories(){
+
+    private fun loadInitialData() {
         setLoading(true)
 
         viewLifecycleOwner.lifecycleScope.launch {
-            try{
+            try {
                 bins = ApiClient.ewasteApi.getBins()
                 categories = ApiClient.ewasteApi.getCategories()
 
-                val binDisplayList: List<Any> = listOf("Select bin") + bins
+                setupBinSpinner()
+                setupCategorySpinner()
+                resetItemTypeSpinner()
 
-                binding.spBin.adapter = ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_spinner_dropdown_item,
-                    binDisplayList
-                )
-                val categoryDisplayList: List<Any> = listOf("Select category") + categories
+                toast("Bins=${bins.size}, Categories=${categories.size}")
 
-                binding.spCategory.adapter = ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_spinner_dropdown_item,
-                    categoryDisplayList
-                )
-
-                binding.spItemType.adapter = ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_spinner_dropdown_item,
-                    listOf("Select item type")
-                )
-
-                binding.spCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-                    override fun onItemSelected(
-                        parent: AdapterView<*>?,
-                        view: View?,
-                        position: Int,
-                        id: Long
-                    ) {
-                        if(position==0){
-                            itemTypes = emptyList()
-                            binding.spItemType.adapter = ArrayAdapter(
-                                requireContext(),
-                                android.R.layout.simple_spinner_dropdown_item,
-                                listOf("Select item type")
-                            )
-                            return
-                        }
-                        val selectedCategory = categories[position-1]
-                        loadItemTypes(selectedCategory.categoryId)
-                    }
-
-                    override fun onNothingSelected(parent: AdapterView<*>?) {}
-                }
-                binding.spItemType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(parent: AdapterView<*>, v: View?, position: Int, id: Long) {
-                        if (position == 0 || itemTypes.isEmpty()) return
-                        val selectedItemType = itemTypes[position - 1] // -1 because of "Select item type"
-
-                        // Auto-fill weight (user can still edit)
-                        binding.etEstimatedWeight.setText(selectedItemType.estimatedAvgWeight.toString())
-                    }
-
-                    override fun onNothingSelected(parent: AdapterView<*>) {}
-                }
-            }catch (e: Exception){
-                toast("Failed to load bins/categories.")
-            }finally {
+            } catch (e: Exception) {
+                toast("Failed to load bins / categories")
+            } finally {
                 setLoading(false)
             }
         }
     }
+
+    private fun setupBinSpinner() {
+        val labels = listOf("Select bin") + bins.map {
+            "${it.binId} - ${it.locationName ?: "Bin"}"
+        }
+
+        binding.spBin.adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_item,
+            labels
+        ).also {
+            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
+    }
+
+    private fun setupCategorySpinner() {
+        val labels = listOf("Select category") + categories.map { it.categoryName }
+
+        binding.spCategory.adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_item,
+            labels
+        ).also {
+            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
+
+        binding.spCategory.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    if (position == 0) {
+                        resetItemTypeSpinner()
+                        return
+                    }
+                    loadItemTypes(categories[position - 1].categoryId)
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
+    }
+
     private fun loadItemTypes(categoryId: Int) {
         setLoading(true)
 
@@ -122,30 +120,55 @@ class DisposeFragment : Fragment(R.layout.fragment_dispose) {
             try {
                 itemTypes = ApiClient.ewasteApi.getItemTypes(categoryId)
 
-                val itemTypeDisplayList: List<Any> =
-                    listOf("Select item type") + itemTypes
+                val labels = listOf("Select item type") + itemTypes.map { it.itemName }
 
                 binding.spItemType.adapter = ArrayAdapter(
                     requireContext(),
-                    android.R.layout.simple_spinner_dropdown_item,
-                    itemTypeDisplayList
-                )
+                    android.R.layout.simple_spinner_item,
+                    labels
+                ).also {
+                    it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                }
+
+                binding.spItemType.onItemSelectedListener =
+                    object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            parent: AdapterView<*>?,
+                            view: View?,
+                            position: Int,
+                            id: Long
+                        ) {
+                            if (position == 0) return
+                            binding.etEstimatedWeight.setText(
+                                itemTypes[position - 1].estimatedAvgWeight.toString()
+                            )
+                        }
+
+                        override fun onNothingSelected(parent: AdapterView<*>?) {}
+                    }
 
             } catch (e: Exception) {
-                itemTypes = emptyList()
-                binding.spItemType.adapter = ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_spinner_dropdown_item,
-                    listOf("Select item type")
-                )
-                toast("Failed to load item types.")
+                toast("Failed to load item types")
+                resetItemTypeSpinner()
             } finally {
                 setLoading(false)
             }
         }
     }
+
+    private fun resetItemTypeSpinner() {
+        itemTypes = emptyList()
+        binding.spItemType.adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_item,
+            listOf("Select item type")
+        ).also {
+            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
+    }
+
+
     private fun submit() {
-        // Required: category + item type
         val categoryPos = binding.spCategory.selectedItemPosition
         val itemTypePos = binding.spItemType.selectedItemPosition
 
@@ -153,71 +176,60 @@ class DisposeFragment : Fragment(R.layout.fragment_dispose) {
         val weightStr = binding.etEstimatedWeight.text.toString().trim()
         val feedback = binding.etFeedback.text.toString().trim()
 
-        if (categoryPos == 0) {
-            toast("Please select a category"); return
-        }
-        if (itemTypePos == 0) {
-            toast("Please select an item type"); return
-        }
-        if (serialNo.isEmpty()) {
-            toast("Serial No is required"); return
-        }
-        if (weightStr.isEmpty()) {
-            toast("Estimated weight is required"); return
-        }
+        if (categoryPos == 0) return toast("Select category")
+        if (itemTypePos == 0) return toast("Select item type")
+        if (serialNo.isEmpty()) return toast("Serial number required")
+        if (weightStr.isEmpty()) return toast("Estimated weight required")
 
         val weight = weightStr.toDoubleOrNull()
-        if (weight == null || weight <= 0.0) {
-            toast("Estimated weight must be a number > 0"); return
-        }
+            ?: return toast("Invalid weight")
 
         val binPos = binding.spBin.selectedItemPosition
-        val binId: Int? = if (binPos == 0) null else bins[binPos - 1].binId
+        val binId = if (binPos == 0) null else bins[binPos - 1].binId
+        val itemTypeId = itemTypes[itemTypePos - 1].itemTypeId
+        // Get userId from SessionManager
+        val sessionManager = SessionManager(requireContext())
+        val userId = sessionManager.userId() ?: run {
+            toast("Please login first")
+            return
+        }
 
-        // Selected item type id
-        val selectedItemTypeId = itemTypes[itemTypePos - 1].itemTypeId
-
-        val req = CreateDisposalLogRequest(
+        val request = CreateDisposalLogRequest(
             binId = binId,
-            itemTypeId = selectedItemTypeId,
+            itemTypeId = itemTypeId,
             serialNo = serialNo,
             estimatedWeightKg = weight,
-            feedback = feedback.ifBlank { null }
+            feedback = feedback.ifBlank { null },
+            userId = userId
         )
 
+
         setLoading(true)
+
         viewLifecycleOwner.lifecycleScope.launch {
             try {
-                ApiClient.ewasteApi.createDisposalLog(req)
-                toast("Submitted ✅")
-
+                ApiClient.ewasteApi.createDisposalLog(request)
+                toast("Submitted successfully")
                 clearFormKeepTimestamp()
-
             } catch (e: Exception) {
-                toast("Submit failed. Check API connection.")
+                toast("Submit failed")
             } finally {
                 setLoading(false)
             }
         }
     }
+
+
     private fun clearFormKeepTimestamp() {
         binding.spBin.setSelection(0)
-        binding.etFeedback.setText("")
         binding.spCategory.setSelection(0)
-
-        // reset item types spinner
-        itemTypes = emptyList()
-        binding.spItemType.adapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_spinner_dropdown_item,
-            listOf("Select item type")
-        )
-
         binding.etSerialNo.setText("")
         binding.etEstimatedWeight.setText("")
+        binding.etFeedback.setText("")
+        resetItemTypeSpinner()
     }
+
     private fun setLoading(loading: Boolean) {
-        // Simple UX: disable submit while loading
         binding.buttonLogDisposal.isEnabled = !loading
         binding.btnBack.isEnabled = !loading
     }
@@ -235,6 +247,4 @@ class DisposeFragment : Fragment(R.layout.fragment_dispose) {
         super.onDestroyView()
         _binding = null
     }
-
-
 }
