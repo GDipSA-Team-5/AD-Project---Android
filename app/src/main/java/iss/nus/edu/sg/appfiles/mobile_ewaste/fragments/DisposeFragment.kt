@@ -30,9 +30,11 @@ class DisposeFragment : Fragment(R.layout.fragment_dispose) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentDisposeBinding.bind(view)
 
+        val selectedBinId = arguments?.getInt("selectedBinId")?.takeIf { it > 0 }
+
         setupTimestamp()
         setupButtons()
-        loadInitialData()
+        loadInitialData(selectedBinId)
     }
 
 
@@ -47,7 +49,7 @@ class DisposeFragment : Fragment(R.layout.fragment_dispose) {
     }
 
 
-    private fun loadInitialData() {
+    private fun loadInitialData(selectedBinId: Int?) {
         setLoading(true)
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -55,7 +57,7 @@ class DisposeFragment : Fragment(R.layout.fragment_dispose) {
                 bins = ApiClient.ewasteApi.getBins()
                 categories = ApiClient.ewasteApi.getCategories()
 
-                setupBinSpinner()
+                setupBinSpinner(selectedBinId)
                 setupCategorySpinner()
                 resetItemTypeSpinner()
 
@@ -69,7 +71,7 @@ class DisposeFragment : Fragment(R.layout.fragment_dispose) {
         }
     }
 
-    private fun setupBinSpinner() {
+    private fun setupBinSpinner(selectedBinId: Int?) {
         val labels = listOf("Select bin") + bins.map {
             "${it.binId} - ${it.locationName ?: "Bin"}"
         }
@@ -80,6 +82,13 @@ class DisposeFragment : Fragment(R.layout.fragment_dispose) {
             labels
         ).also {
             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
+
+        if (selectedBinId != null) {
+            val index = bins.indexOfFirst { it.binId == selectedBinId }
+            if (index >= 0) {
+                binding.spBin.setSelection(index + 1)
+            }
         }
     }
 
