@@ -23,4 +23,5 @@ object ApiClient {
         .build()
 
     val authApi: AuthApi = retrofit.create(AuthApi::class.java)
+    val regionApi: RegionApi = retrofit.create(RegionApi::class.java)
 }

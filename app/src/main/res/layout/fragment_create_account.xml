@@ -114,18 +114,14 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <EditText
+            <Spinner
                 android:id="@+id/inputRegionId"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/bg_input"
-                android:hint="e.g. 1"
-                android:inputType="number"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-        android:textColor="@color/text_input"
-        android:textColorHint="@color/text_hint" />
+                android:paddingEnd="16dp" />
 
             <TextView
                 android:layout_width="wrap_content"
