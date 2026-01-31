@@ -8,7 +8,7 @@ import iss.nus.edu.sg.appfiles.mobile_ewaste.data.model.Coordinate
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.repository.EwasteRepository
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.repository.GeocodingRepository
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.repository.LocationRepository
-import iss.nus.edu.sg.appfiles.mobile_ewaste.network.DataGovApiClient
+import iss.nus.edu.sg.appfiles.mobile_ewaste.network.ApiClient
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,8 +19,7 @@ import kotlinx.coroutines.launch
 
 class LocateViewModel(application: Application) : AndroidViewModel(application) {
     private val ewasteRepository = EwasteRepository(
-        application.applicationContext,
-        DataGovApiClient.dataGovApi
+        ApiClient.ewasteApi
     )
     private val locationRepository = LocationRepository(application.applicationContext)
     private val geocodingRepository = GeocodingRepository(application.applicationContext)
@@ -61,7 +60,7 @@ class LocateViewModel(application: Application) : AndroidViewModel(application) 
 
     private suspend fun loadBinsForCoordinate(coordinate: Coordinate) {
         try {
-            val bins = ewasteRepository.getNearbyBins(coordinate, limit = 3)
+            val bins = ewasteRepository.getNearbyBins(coordinate, limit = 5)
             _state.update {
                 it.copy(
                     isLoading = false,

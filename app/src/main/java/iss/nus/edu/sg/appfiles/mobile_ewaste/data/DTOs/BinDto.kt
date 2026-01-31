@@ -4,5 +4,11 @@ import com.google.gson.annotations.SerializedName
 
 data class BinDto(
     @SerializedName("binId") val binId: Int,
-    @SerializedName("locationName") val locationName: String?
+    @SerializedName("regionId") val regionId: Int?,
+    @SerializedName("locationName") val locationName: String?,
+    @SerializedName("locationAddress") val locationAddress: String?,
+    @SerializedName("binStatus") val binStatus: String?,
+    @SerializedName("latitude") val latitude: Double?,
+    @SerializedName("longitude") val longitude: Double?,
+    @SerializedName("predictedStatus") val predictedStatus: String?
 )

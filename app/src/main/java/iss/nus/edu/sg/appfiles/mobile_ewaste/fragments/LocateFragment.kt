@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.graphics.Color
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -16,6 +17,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import iss.nus.edu.sg.appfiles.mobile_ewaste.R
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.model.BinLocation
 import iss.nus.edu.sg.appfiles.mobile_ewaste.databinding.FragmentLocateBinding
@@ -154,6 +156,26 @@ class LocateFragment : Fragment(R.layout.fragment_locate) {
             itemBinding.binAccess.text = bin.access
             itemBinding.binDistance.text = formatDistance(bin.distanceMeters)
             itemBinding.binDescription.text = bin.description
+            val isMaintenance = bin.access.equals("Maintenance", ignoreCase = true)
+            if (isMaintenance) {
+                itemBinding.binAccess.setTextColor(Color.parseColor("#DC2626"))
+            } else {
+                itemBinding.binAccess.setTextColor(Color.parseColor("#2FAE66"))
+            }
+            itemBinding.binSelectButton.isEnabled = !isMaintenance
+            if (isMaintenance) {
+                itemBinding.binSelectButton.alpha = 0.5f
+                itemBinding.binCard.setCardBackgroundColor(Color.parseColor("#F3F4F6"))
+            } else {
+                itemBinding.binSelectButton.alpha = 1f
+                itemBinding.binCard.setCardBackgroundColor(Color.WHITE)
+            }
+            itemBinding.binSelectButton.setOnClickListener {
+                val args = Bundle().apply {
+                    putInt("selectedBinId", bin.binId)
+                }
+                findNavController().navigate(R.id.action_locate_to_dispose, args)
+            }
             fragmentBinding.nearbyBinsContainer.addView(itemBinding.root)
         }
     }

@@ -43,7 +43,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             findNavController().navigate(R.id.disposeFragment)
         }
         fragmentBinding.quickActionGuidelines.setOnClickListener {
-            findNavController().navigate(R.id.disposeFragment)
+            findNavController().navigate(R.id.guidelinesFragment)
         }
         fragmentBinding.quickActionRedeem.setOnClickListener {
             findNavController().navigate(R.id.rewardsFragment)

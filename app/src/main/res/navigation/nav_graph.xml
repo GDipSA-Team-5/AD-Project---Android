@@ -73,12 +73,21 @@
     <fragment
         android:id="@+id/locateFragment"
         android:name="iss.nus.edu.sg.appfiles.mobile_ewaste.fragments.LocateFragment"
-        android:label="Locate" />
+        android:label="Locate">
+        <action
+            android:id="@+id/action_locate_to_dispose"
+            app:destination="@id/disposeFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/disposeFragment"
         android:name="iss.nus.edu.sg.appfiles.mobile_ewaste.fragments.DisposeFragment"
-        android:label="Dispose" />
+        android:label="Dispose">
+        <argument
+            android:name="selectedBinId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
 
     <fragment
         android:id="@+id/rewardsFragment"
@@ -89,5 +98,10 @@
         android:id="@+id/profileFragment"
         android:name="iss.nus.edu.sg.appfiles.mobile_ewaste.fragments.ProfileFragment"
         android:label="Profile" />
+
+    <fragment
+        android:id="@+id/guidelinesFragment"
+        android:name="iss.nus.edu.sg.appfiles.mobile_ewaste.fragments.GuidelinesFragment"
+        android:label="Guidelines" />
 
 </navigation>
