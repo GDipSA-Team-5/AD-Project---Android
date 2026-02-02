@@ -22,7 +22,9 @@ class DisposeFragment : Fragment(R.layout.fragment_dispose) {
     private var _binding: FragmentDisposeBinding? = null
     private val binding get() = _binding!!
 
-    private var bins: List<BinDto> = emptyList()
+    private var selectedBinId: Int? = null
+    private var selectedBinLabel: String? = null
+
     private var categories: List<CategoryDto> = emptyList()
     private var itemTypes: List<ItemTypeDto> = emptyList()
 
@@ -30,11 +32,15 @@ class DisposeFragment : Fragment(R.layout.fragment_dispose) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentDisposeBinding.bind(view)
 
-        val selectedBinId = arguments?.getInt("selectedBinId")?.takeIf { it > 0 }
-
         setupTimestamp()
         setupButtons()
-        loadInitialData(selectedBinId)
+        setupBinResultListener()
+
+        applySelectedBinFromArgs()
+        updateBinButtonText()
+
+        loadCategories()
+        resetItemTypeSpinner()
     }
 
 
@@ -44,50 +50,23 @@ class DisposeFragment : Fragment(R.layout.fragment_dispose) {
     }
 
     private fun setupButtons() {
-        binding.btnBack.setOnClickListener { goBack() }
+        binding.btnSelectBin.setOnClickListener {
+            findNavController().navigate(R.id.locateFragment)
+        }
         binding.buttonLogDisposal.setOnClickListener { submit() }
     }
 
-
-    private fun loadInitialData(selectedBinId: Int?) {
+    private fun loadCategories() {
         setLoading(true)
 
         viewLifecycleOwner.lifecycleScope.launch {
             try {
-                bins = ApiClient.ewasteApi.getBins()
                 categories = ApiClient.ewasteApi.getCategories()
-
-                setupBinSpinner(selectedBinId)
                 setupCategorySpinner()
-                resetItemTypeSpinner()
-
-                toast("Bins=${bins.size}, Categories=${categories.size}")
-
             } catch (e: Exception) {
-                toast("Failed to load bins / categories")
+                toast("Failed to load categories")
             } finally {
                 setLoading(false)
-            }
-        }
-    }
-
-    private fun setupBinSpinner(selectedBinId: Int?) {
-        val labels = listOf("Select bin") + bins.map {
-            "${it.binId} - ${it.locationName ?: "Bin"}"
-        }
-
-        binding.spBin.adapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_spinner_item,
-            labels
-        ).also {
-            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        }
-
-        if (selectedBinId != null) {
-            val index = bins.indexOfFirst { it.binId == selectedBinId }
-            if (index >= 0) {
-                binding.spBin.setSelection(index + 1)
             }
         }
     }
@@ -193,8 +172,7 @@ class DisposeFragment : Fragment(R.layout.fragment_dispose) {
         val weight = weightStr.toDoubleOrNull()
             ?: return toast("Invalid weight")
 
-        val binPos = binding.spBin.selectedItemPosition
-        val binId = if (binPos == 0) null else bins[binPos - 1].binId
+        val binId = selectedBinId
         val itemTypeId = itemTypes[itemTypePos - 1].itemTypeId
         // Get userId from SessionManager
         val sessionManager = SessionManager(requireContext())
@@ -230,7 +208,9 @@ class DisposeFragment : Fragment(R.layout.fragment_dispose) {
 
 
     private fun clearFormKeepTimestamp() {
-        binding.spBin.setSelection(0)
+        selectedBinId = null
+        selectedBinLabel = null
+        updateBinButtonText()
         binding.spCategory.setSelection(0)
         binding.etSerialNo.setText("")
         binding.etEstimatedWeight.setText("")
@@ -240,12 +220,51 @@ class DisposeFragment : Fragment(R.layout.fragment_dispose) {
 
     private fun setLoading(loading: Boolean) {
         binding.buttonLogDisposal.isEnabled = !loading
-        binding.btnBack.isEnabled = !loading
     }
 
-    private fun goBack() {
-        runCatching { findNavController().navigateUp() }
-            .onFailure { requireActivity().onBackPressedDispatcher.onBackPressed() }
+    private fun setupBinResultListener() {
+        val savedStateHandle = findNavController().currentBackStackEntry?.savedStateHandle
+
+        savedStateHandle?.getLiveData<Int>("selectedBinId")
+            ?.observe(viewLifecycleOwner) { id ->
+                if (id > 0) {
+                    selectedBinId = id
+                    selectedBinLabel = savedStateHandle.get<String>("selectedBinLabel")
+                    updateBinButtonText()
+                }
+            }
+
+        savedStateHandle?.getLiveData<String>("selectedBinLabel")
+            ?.observe(viewLifecycleOwner) { label ->
+                if (!label.isNullOrBlank()) {
+                    selectedBinLabel = label
+                    updateBinButtonText()
+                }
+            }
+    }
+
+    private fun applySelectedBinFromArgs() {
+        val argBinId = arguments?.getInt("selectedBinId")?.takeIf { it > 0 }
+        val argBinLabel = arguments?.getString("selectedBinLabel")?.trim().orEmpty()
+
+        if (argBinId != null) {
+            selectedBinId = argBinId
+        }
+        if (argBinLabel.isNotBlank()) {
+            selectedBinLabel = argBinLabel
+        }
+    }
+
+    private fun updateBinButtonText() {
+        val label = selectedBinLabel?.takeIf { it.isNotBlank() }
+        val id = selectedBinId
+        binding.btnSelectBin.text = if (id != null && label != null) {
+            "Bin $id - $label"
+        } else if (id != null) {
+            "Bin $id"
+        } else {
+            "Select bin"
+        }
     }
 
     private fun toast(msg: String) {

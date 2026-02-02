@@ -87,6 +87,10 @@
             android:name="selectedBinId"
             app:argType="integer"
             android:defaultValue="-1" />
+        <argument
+            android:name="selectedBinLabel"
+            app:argType="string"
+            android:defaultValue="" />
     </fragment>
 
     <fragment
