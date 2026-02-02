@@ -171,10 +171,24 @@ class LocateFragment : Fragment(R.layout.fragment_locate) {
                 itemBinding.binCard.setCardBackgroundColor(Color.WHITE)
             }
             itemBinding.binSelectButton.setOnClickListener {
+                val navController = findNavController()
+                val previousEntry = navController.previousBackStackEntry
+
+                // If user came here from Dispose, return the selection instead of
+                // pushing a new Dispose instance onto the back stack.
+                if (previousEntry?.destination?.id == R.id.disposeFragment) {
+                    previousEntry.savedStateHandle["selectedBinId"] = bin.binId
+                    previousEntry.savedStateHandle["selectedBinLabel"] = bin.name
+                    navController.navigateUp()
+                    return@setOnClickListener
+                }
+
+                // Otherwise (e.g., entered Locate via bottom nav), navigate to Dispose.
                 val args = Bundle().apply {
                     putInt("selectedBinId", bin.binId)
+                    putString("selectedBinLabel", bin.name)
                 }
-                findNavController().navigate(R.id.action_locate_to_dispose, args)
+                navController.navigate(R.id.action_locate_to_dispose, args)
             }
             fragmentBinding.nearbyBinsContainer.addView(itemBinding.root)
         }

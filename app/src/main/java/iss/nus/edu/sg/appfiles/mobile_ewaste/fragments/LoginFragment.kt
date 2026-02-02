@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import iss.nus.edu.sg.appfiles.mobile_ewaste.R
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.SessionManager
@@ -72,7 +73,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                             is LoginEvent.Success -> {
                                 SessionManager(requireContext()).saveLogin(event.userId)
                                 Toast.makeText(requireContext(), "Logged in", Toast.LENGTH_SHORT).show()
-                                findNavController().navigate(R.id.action_login_to_home)
+                                val options = NavOptions.Builder()
+                                    .setPopUpTo(R.id.loginFragment, true) // inclusive = true
+                                    .build()
+                                findNavController().navigate(R.id.homeFragment, null, options)
                             }
                             is LoginEvent.Error ->
                                 Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
