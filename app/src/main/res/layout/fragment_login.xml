@@ -18,11 +18,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <View
+        <ImageView
             android:id="@+id/logoCircle"
             android:layout_width="68dp"
             android:layout_height="68dp"
-            android:background="@drawable/bg_circle" />
+            android:background="@drawable/bg_circle"
+            android:src="@drawable/bg_logo_icon"
+            android:scaleType="centerInside"
+            android:contentDescription="App logo" />
 
         <TextView
             android:id="@+id/loginTitle"

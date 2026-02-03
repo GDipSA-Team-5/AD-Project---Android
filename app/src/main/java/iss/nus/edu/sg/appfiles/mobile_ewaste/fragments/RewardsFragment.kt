@@ -31,7 +31,6 @@ class RewardsFragment : Fragment(R.layout.fragment_rewards) {
 
         // Defaults so UI isn't blank while loading
         binding.textAvailablePoints.text = "0"
-        binding.textExpiringSoon.text = "0 pts on -"
 
         loadRewards()
 
@@ -55,9 +54,6 @@ class RewardsFragment : Fragment(R.layout.fragment_rewards) {
                 binding.textAvailablePoints.text =
                     NumberFormat.getNumberInstance(Locale.getDefault())
                         .format(summary.totalPoints)
-
-                val expDate = summary.nearestExpiryDate ?: "-"
-                binding.textExpiringSoon.text = "${summary.expiringSoonPoints} pts on $expDate"
 
                 binding.textTotalDisposals.text = summary.totalDisposals.toString()
                 binding.textTotalRedeemed.text = summary.totalRedeemed.toString()
