@@ -5,11 +5,10 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import iss.nus.edu.sg.appfiles.mobile_ewaste.data.SessionManager
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,26 +26,14 @@ class MainActivity : AppCompatActivity() {
 
         bottomNav.setupWithNavController(navController)
 
-        bottomNav.setOnItemSelectedListener { item ->
-            val currentId = navController.currentDestination?.id
-            if (currentId == item.itemId) return@setOnItemSelectedListener true
-
-            val options = NavOptions.Builder()
-                .setLaunchSingleTop(true)
-                .setRestoreState(true)
-                // destinationId, inclusive, saveState
-                .setPopUpTo(navController.graph.findStartDestination().id, false, true)
-                .build()
-
-            try {
-                navController.navigate(item.itemId, null, options)
-                true
-            } catch (e: IllegalArgumentException) {
-                false
+        // If a tab is already selected (e.g., Home) but user is on a nested screen
+        // like History, a re-tap should pop back to the tab root.
+        bottomNav.setOnItemReselectedListener { item ->
+            val popped = navController.popBackStack(item.itemId, false)
+            if (!popped) {
+                runCatching { navController.navigate(item.itemId) }
             }
         }
-
-        bottomNav.setOnItemReselectedListener { }
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             val hideBottomNav = destination.id == R.id.loginFragment ||
@@ -54,6 +41,17 @@ class MainActivity : AppCompatActivity() {
                     destination.id == R.id.resetPasswordFragment
 
             bottomNav.visibility = if (hideBottomNav) View.GONE else View.VISIBLE
+        }
+
+        val session = SessionManager(this)
+        if (!session.isLoggedIn() && navController.currentDestination?.id != R.id.loginFragment) {
+            navController.navigate(
+                R.id.loginFragment,
+                null,
+                androidx.navigation.NavOptions.Builder()
+                    .setPopUpTo(R.id.homeFragment, true)
+                    .build()
+            )
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainRoot)) { view, insets ->

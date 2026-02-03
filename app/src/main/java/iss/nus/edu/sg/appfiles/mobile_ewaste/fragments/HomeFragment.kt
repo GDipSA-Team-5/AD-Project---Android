@@ -4,10 +4,15 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import iss.nus.edu.sg.appfiles.mobile_ewaste.R
+import iss.nus.edu.sg.appfiles.mobile_ewaste.data.Adapter.DisposalHistoryAdapter
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.SessionManager
 import iss.nus.edu.sg.appfiles.mobile_ewaste.databinding.FragmentHomeBinding
+import iss.nus.edu.sg.appfiles.mobile_ewaste.network.ApiClient
+import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
     private var binding: FragmentHomeBinding? = null
@@ -20,6 +25,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         setupLogout(fragmentBinding)
         setupQuickActions(fragmentBinding)
+        setupRecentHistory(fragmentBinding)
     }
 
     override fun onDestroyView() {
@@ -47,6 +53,42 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
         fragmentBinding.quickActionRedeem.setOnClickListener {
             findNavController().navigate(R.id.rewardsFragment)
+        }
+    }
+
+    private fun setupRecentHistory(fragmentBinding: FragmentHomeBinding) {
+        fragmentBinding.recentSeeAll.setOnClickListener {
+            findNavController().navigate(R.id.historyFragment)
+        }
+
+        val adapter = DisposalHistoryAdapter()
+        fragmentBinding.recentHistoryList.layoutManager = LinearLayoutManager(requireContext())
+        fragmentBinding.recentHistoryList.adapter = adapter
+
+        val userId = SessionManager(requireContext()).userId()
+        if (userId == null) {
+            fragmentBinding.recentEmpty.visibility = View.VISIBLE
+            fragmentBinding.recentHistoryList.visibility = View.GONE
+            return
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            runCatching {
+                ApiClient.ewasteApi.getDisposalHistory(userId = userId, range = "all")
+            }.onSuccess { list ->
+                val preview = list.take(2)
+                if (preview.isEmpty()) {
+                    fragmentBinding.recentEmpty.visibility = View.VISIBLE
+                    fragmentBinding.recentHistoryList.visibility = View.GONE
+                } else {
+                    fragmentBinding.recentEmpty.visibility = View.GONE
+                    fragmentBinding.recentHistoryList.visibility = View.VISIBLE
+                    adapter.submitList(preview)
+                }
+            }.onFailure {
+                fragmentBinding.recentEmpty.visibility = View.VISIBLE
+                fragmentBinding.recentHistoryList.visibility = View.GONE
+            }
         }
     }
 }
