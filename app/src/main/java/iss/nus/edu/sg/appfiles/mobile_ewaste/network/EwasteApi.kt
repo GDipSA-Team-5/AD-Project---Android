@@ -3,6 +3,7 @@ package iss.nus.edu.sg.appfiles.mobile_ewaste.network
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.BinDto
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.CategoryDto
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.CreateDisposalLogRequest
+import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.DisposalHistoryDto
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.ItemTypeDto
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -23,6 +24,10 @@ interface EwasteApi {
         @Query("categoryId") categoryId: Int
     ): List<ItemTypeDto>
 
+    @GET("api/disposallogs/history")
+    suspend fun getDisposalHistory(
+        @Query("userID") userId:Int,
+        @Query("range")range:String = "all"): List<DisposalHistoryDto>
     @POST("api/disposallogs")
     suspend fun createDisposalLog(
         @Body request: CreateDisposalLogRequest

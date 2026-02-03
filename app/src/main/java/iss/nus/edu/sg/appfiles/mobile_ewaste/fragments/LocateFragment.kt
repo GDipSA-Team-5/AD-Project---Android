@@ -177,9 +177,13 @@ class LocateFragment : Fragment(R.layout.fragment_locate) {
                 // If user came here from Dispose, return the selection instead of
                 // pushing a new Dispose instance onto the back stack.
                 if (previousEntry?.destination?.id == R.id.disposeFragment) {
-                    previousEntry.savedStateHandle["selectedBinId"] = bin.binId
-                    previousEntry.savedStateHandle["selectedBinLabel"] = bin.name
-                    navController.navigateUp()
+                    val args = Bundle().apply {
+                        putInt("selectedBinId", bin.binId)
+                        putString("selectedBinLabel", bin.name)
+                    }
+
+                    // Keep Locate in back stack so user can press back to return.
+                    navController.navigate(R.id.disposeFragment, args)
                     return@setOnClickListener
                 }
 
