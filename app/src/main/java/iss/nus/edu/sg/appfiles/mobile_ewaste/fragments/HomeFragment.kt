@@ -13,6 +13,8 @@ import iss.nus.edu.sg.appfiles.mobile_ewaste.data.SessionManager
 import iss.nus.edu.sg.appfiles.mobile_ewaste.databinding.FragmentHomeBinding
 import iss.nus.edu.sg.appfiles.mobile_ewaste.network.ApiClient
 import kotlinx.coroutines.launch
+import java.text.NumberFormat
+import java.util.Locale
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
     private var binding: FragmentHomeBinding? = null
@@ -25,6 +27,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         setupLogout(fragmentBinding)
         setupQuickActions(fragmentBinding)
+        setupRewardsPreview(fragmentBinding)
         setupRecentHistory(fragmentBinding)
     }
 
@@ -53,6 +56,32 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
         fragmentBinding.quickActionRedeem.setOnClickListener {
             findNavController().navigate(R.id.rewardsFragment)
+        }
+    }
+
+    private fun setupRewardsPreview(fragmentBinding: FragmentHomeBinding) {
+        fragmentBinding.buttonHomeBrowseRewards.setOnClickListener {
+            findNavController().navigate(R.id.rewardsFragment)
+        }
+        fragmentBinding.rewardCard.setOnClickListener {
+            findNavController().navigate(R.id.rewardsFragment)
+        }
+
+        val userId = SessionManager(requireContext()).userId()
+        if (userId == null) {
+            fragmentBinding.textHomeAvailablePoints.text = "0"
+            return
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            runCatching {
+                ApiClient.ewasteApi.getRewardsSummary(userId)
+            }.onSuccess { summary ->
+                fragmentBinding.textHomeAvailablePoints.text =
+                    NumberFormat.getNumberInstance(Locale.getDefault()).format(summary.totalPoints)
+            }.onFailure {
+                fragmentBinding.textHomeAvailablePoints.text = "0"
+            }
         }
     }
 
