@@ -5,6 +5,8 @@ import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.CategoryDto
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.CreateDisposalLogRequest
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.DisposalHistoryDto
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.ItemTypeDto
+import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.RewardsHistoryDto
+import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.RewardsSummaryDto
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
@@ -32,4 +34,12 @@ interface EwasteApi {
     suspend fun createDisposalLog(
         @Body request: CreateDisposalLogRequest
     )
+
+    @GET("api/rewards/summary")
+    suspend fun getRewardsSummary(
+        @Query("userId")userId: Int): RewardsSummaryDto
+
+    @GET("api/rewards/history")
+    suspend fun getRewardsHistory(
+        @Query("userId")userId:Int): List<RewardsHistoryDto>
 }
