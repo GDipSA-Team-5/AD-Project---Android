@@ -7,6 +7,11 @@ import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.DisposalHistoryDto
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.ItemTypeDto
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.RewardsHistoryDto
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.RewardsSummaryDto
+import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.RewardWalletDto
+import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.RewardCatalogueDto
+import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.RedeemRequestDto
+import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.RedeemResponseDto
+import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.RewardRedemptionItemDto
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.UserProfileDto
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -45,4 +50,18 @@ interface EwasteApi {
     @GET("api/rewards/history")
     suspend fun getRewardsHistory(
         @Query("userId")userId:Int): List<RewardsHistoryDto>
+
+    @GET("api/rewards/wallet")
+    suspend fun getRewardWallet(
+        @Query("userId")userId: Int): RewardWalletDto
+
+    @GET("api/rewards/catalogue")
+    suspend fun getRewardCatalogue(): List<RewardCatalogueDto>
+
+    @POST("api/rewards/redeem")
+    suspend fun redeemReward(@Body request: RedeemRequestDto): RedeemResponseDto
+
+    @GET("api/rewards/redemptions")
+    suspend fun getRewardRedemptions(
+        @Query("userId")userId: Int): List<RewardRedemptionItemDto>
 }

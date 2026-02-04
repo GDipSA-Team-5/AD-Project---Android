@@ -14,6 +14,7 @@ import iss.nus.edu.sg.appfiles.mobile_ewaste.network.ApiClient
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.Locale
+import androidx.navigation.fragment.findNavController
 
 class RewardsFragment : Fragment(R.layout.fragment_rewards) {
 
@@ -35,7 +36,7 @@ class RewardsFragment : Fragment(R.layout.fragment_rewards) {
         loadRewards()
 
         binding.buttonRedeem.setOnClickListener {
-            toast("Redeem (later)")
+            findNavController().navigate(R.id.action_rewards_to_store)
         }
     }
 
