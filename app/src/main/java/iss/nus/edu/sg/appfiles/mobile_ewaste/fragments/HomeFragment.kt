@@ -24,7 +24,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         val fragmentBinding = FragmentHomeBinding.bind(view)
         binding = fragmentBinding
-
+        setupUsername(fragmentBinding)
         setupLogout(fragmentBinding)
         setupQuickActions(fragmentBinding)
         setupRewardsPreview(fragmentBinding)
@@ -35,12 +35,28 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         super.onDestroyView()
         binding = null
     }
-
     private fun setupLogout(fragmentBinding: FragmentHomeBinding) {
         fragmentBinding.buttonLogout.setOnClickListener {
             SessionManager(requireContext()).clear()
             Toast.makeText(requireContext(), "Logged out", Toast.LENGTH_SHORT).show()
             findNavController().navigate(R.id.action_home_to_login)
+        }
+    }
+    private fun setupUsername(fragmentBinding: FragmentHomeBinding){
+        val userId = SessionManager(requireContext()).userId()
+        if (userId == null) {
+            fragmentBinding.homeTitle.text = "Invalid"
+            return
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            runCatching {
+                ApiClient.ewasteApi.getUser(userId)
+            }.onSuccess { user ->
+                fragmentBinding.homeTitle.text = "Hello  ${user.userName}"
+            }.onFailure {
+                fragmentBinding.textHomeAvailablePoints.text = "0"
+            }
         }
     }
 
