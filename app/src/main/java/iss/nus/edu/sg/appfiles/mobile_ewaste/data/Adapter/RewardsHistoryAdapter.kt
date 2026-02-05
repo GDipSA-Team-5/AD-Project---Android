@@ -2,6 +2,7 @@ package iss.nus.edu.sg.appfiles.mobile_ewaste.data.Adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import iss.nus.edu.sg.appfiles.mobile_ewaste.R
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.RewardsHistoryDto
@@ -31,28 +32,22 @@ class RewardsHistoryAdapter(private var items:List<RewardsHistoryDto> = emptyLis
         if (item.points >= 0) {
             holder.binding.tvPoints.text = "+${item.points}"
             holder.binding.tvPoints.setTextColor(0xFF16A34A.toInt())
+            holder.binding.ivIcon.setColorFilter(
+                ContextCompat.getColor(holder.itemView.context, R.color.brand_green)
+            )
         } else {
             holder.binding.tvPoints.text = item.points.toString()
             holder.binding.tvPoints.setTextColor(0xFFDC2626.toInt())
+            holder.binding.ivIcon.setColorFilter(
+                ContextCompat.getColor(holder.itemView.context, R.color.brand_red)
+            )
         }
-
-        holder.binding.ivIcon.setImageResource(getIconByCategory(item.categoryName))
     }
     override fun getItemCount(): Int = items.size
 
     fun submitList(newItems: List<RewardsHistoryDto>) {
         items = newItems
         notifyDataSetChanged()
-    }
-    private fun getIconByCategory(category: String): Int {
-        return when (category.lowercase()) {
-            "mobile", "phone" -> R.drawable.ic_medal
-            "laptop", "computer" -> R.drawable.ic_medal
-            "battery" -> R.drawable.ic_medal
-            "appliance" -> R.drawable.ic_medal
-            "cable", "charger" -> R.drawable.ic_medal
-            else -> R.drawable.ic_medal
-        }
     }
 
     private fun formatDate(raw: String): String {

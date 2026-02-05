@@ -26,6 +26,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding = fragmentBinding
         setupUsername(fragmentBinding)
         setupLogout(fragmentBinding)
+        setupYourImpact(fragmentBinding)
         setupQuickActions(fragmentBinding)
         setupRewardsPreview(fragmentBinding)
         setupRecentHistory(fragmentBinding)
@@ -53,7 +54,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             runCatching {
                 ApiClient.ewasteApi.getUser(userId)
             }.onSuccess { user ->
-                fragmentBinding.homeTitle.text = "Hello  ${user.userName}"
+                fragmentBinding.homeTitle.text = "Hello ${user.userName}"
             }.onFailure {
                 fragmentBinding.textHomeAvailablePoints.text = "0"
             }
@@ -74,7 +75,42 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             findNavController().navigate(R.id.rewardsFragment)
         }
     }
+    fun co2SavedKg(totalEwasteKg: Double): Double {
+        val factor = 0.7
+        return totalEwasteKg * factor
+    }
+    private fun setupYourImpact(fragmentBinding: FragmentHomeBinding){
+        val userId = SessionManager(requireContext()).userId()
+        if (userId == null) {
+            fragmentBinding.totalEwaste.text = "0.0 kg"
+            fragmentBinding.totalCO2.text = "0.0 kg"
+            fragmentBinding.totalDispose.text = "0"
+            return
+        }
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            runCatching {
+                ApiClient.ewasteApi.getDisposalHistory(userId, range ="all")
+            }.onSuccess { list ->
+                val totalEwasteKg = list.sumOf { it.estimatedTotalWeight }
+                val co2Kg = co2SavedKg(totalEwasteKg)
+                val totalCount =list.size
+
+                fragmentBinding.totalEwaste.text =
+                    String.format(Locale.getDefault(), "%.1f kg", totalEwasteKg)
+
+                fragmentBinding.totalCO2.text =
+                    String.format(Locale.getDefault(), "%.1f kg", co2Kg)
+
+                fragmentBinding.totalDispose.text =
+                    totalCount.toString()
+            }.onFailure {
+                fragmentBinding.totalEwaste.text = "0.0 kg"
+                fragmentBinding.totalCO2.text = "0.0 kg"
+                fragmentBinding.totalDispose.text="0"
+            }
+        }
+    }
     private fun setupRewardsPreview(fragmentBinding: FragmentHomeBinding) {
         fragmentBinding.buttonHomeBrowseRewards.setOnClickListener {
             findNavController().navigate(R.id.rewardsFragment)

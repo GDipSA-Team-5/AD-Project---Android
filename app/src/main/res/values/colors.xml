@@ -19,4 +19,5 @@
     <color name="circle_blue_light">#E1ECFF</color>
     <color name="circle_purple_light">#EFE6FF</color>
     <color name="map_placeholder">#E9ECEF</color>
+    <color name="brand_red">#EB0019</color>
 </resources>

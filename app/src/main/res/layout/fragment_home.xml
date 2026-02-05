@@ -63,7 +63,7 @@
                     android:text="Logout"
                     android:textAllCaps="false"
         android:textColor="@color/brand_green"
-                    android:textSize="16sp" />
+                    android:textSize="13sp" />
 
             </LinearLayout>
 
@@ -118,7 +118,7 @@
                             android:layout_height="64dp"
                             android:contentDescription="Rewards"
                             android:src="@drawable/ic_nav_rewards"
-                            android:tint="#FFFFFF"
+                            app:tint="#FFFFFF"
                             android:alpha="0.95" />
 
                     </LinearLayout>
@@ -308,14 +308,6 @@
                     android:textSize="19sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/impactDetails"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="View Details"
-                    android:textColor="#2FAE66"
-                    android:textSize="16sp" />
-
             </LinearLayout>
 
             <com.google.android.material.card.MaterialCardView
@@ -346,10 +338,11 @@
                             android:src="@drawable/ic_leaf" />
 
                         <TextView
+                            android:id="@+id/totalEwaste"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="24.5 kg"
+                            android:text="0.0 kg"
                             android:textColor="#111827"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -378,6 +371,7 @@
                             android:src="@drawable/ic_trend" />
 
                         <TextView
+                            android:id="@+id/totalCO2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
@@ -410,6 +404,7 @@
                             android:src="@drawable/ic_medal" />
 
                         <TextView
+                            android:id="@+id/totalDispose"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"

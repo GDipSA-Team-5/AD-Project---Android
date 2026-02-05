@@ -36,6 +36,9 @@ class DisposalHistoryAdapter(private var items:List<DisposalHistoryDto> = emptyL
         holder.binding.itemMeta.text =
             "${formatWeight(item.estimatedTotalWeight)} · ${item.categoryName ?: "Category"}"
 
+        val cat = EWasteCategory.from(item.categoryName)
+        holder.binding.ivIcon.setImageResource(cat.iconRes)
+
         holder.binding.itemTime.text =
             formatTime(item.disposalTimeStamp)
 
