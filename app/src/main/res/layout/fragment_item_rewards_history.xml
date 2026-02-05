@@ -19,9 +19,9 @@
             android:layout_width="52dp"
             android:layout_height="52dp"
             android:background="@drawable/bg_circle_light"
-            android:contentDescription="Reward icon"
-            android:padding="12dp"
-            android:src="@drawable/ic_medal" />
+            android:padding="10dp"
+            android:src="@drawable/bg_reward_icon" />
+             />
 
         <LinearLayout
             android:layout_width="0dp"

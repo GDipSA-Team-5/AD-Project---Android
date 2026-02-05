@@ -14,10 +14,13 @@
         android:orientation="horizontal"
         android:padding="16dp">
 
-        <View
-            android:id="@+id/itemThumb"
+        <ImageView
+            android:id="@+id/ivIcon"
             android:layout_width="56dp"
             android:layout_height="56dp"
+            android:src = "@drawable/ic_medal"
+            app:tint="@color/circle_green"
+            android:padding="10dp"
             android:background="@drawable/bg_circle_light" />
 
         <LinearLayout
