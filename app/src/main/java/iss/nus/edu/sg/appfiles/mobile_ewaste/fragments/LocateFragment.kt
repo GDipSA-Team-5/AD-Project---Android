@@ -155,7 +155,21 @@ class LocateFragment : Fragment(R.layout.fragment_locate) {
             itemBinding.binAddress.text = bin.address
             itemBinding.binAccess.text = bin.access
             itemBinding.binDistance.text = formatDistance(bin.distanceMeters)
-            itemBinding.binDescription.text = bin.description
+
+            bin.estimatedFillLevel?.let { fillLevel ->
+                itemBinding.binDescription.text = "${fillLevel.toInt()}% full • ${getFillStatusText(fillLevel)}"
+
+                val fillColor = when {
+                    fillLevel >= 90 -> Color.parseColor("#DC2626")  // Red
+                    fillLevel >= 70 -> Color.parseColor("#F59E0B")  // Orange
+                    else -> Color.parseColor("#2FAE66")              // Green
+                }
+                itemBinding.binDescription.setTextColor(fillColor)
+            } ?: run {
+                itemBinding.binDescription.text = "Capacity unknown"
+                itemBinding.binDescription.setTextColor(Color.parseColor("#6B7280"))
+            }
+
             val isMaintenance = bin.access.equals("Maintenance", ignoreCase = true)
             if (isMaintenance) {
                 itemBinding.binAccess.setTextColor(Color.parseColor("#DC2626"))
@@ -195,6 +209,16 @@ class LocateFragment : Fragment(R.layout.fragment_locate) {
                 navController.navigate(R.id.action_locate_to_dispose, args)
             }
             fragmentBinding.nearbyBinsContainer.addView(itemBinding.root)
+        }
+    }
+
+    private fun getFillStatusText(fillLevel: Double): String {
+        return when {
+            fillLevel == null -> "Capacity unknown"
+            fillLevel >= 90 -> "Almost full - Limited space"
+            fillLevel >= 70 -> "Filling up - Some space available"
+            fillLevel >= 50 -> "Half full - Space available"
+            else -> "Plenty of space available"
         }
     }
 

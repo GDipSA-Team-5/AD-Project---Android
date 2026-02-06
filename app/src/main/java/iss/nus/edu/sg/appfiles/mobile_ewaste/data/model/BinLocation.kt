@@ -8,5 +8,8 @@ data class BinLocation(
     val access: String,
     val predictedStatus: String?,
     val distanceMeters: Float,
-    val coordinate: Coordinate
+    val coordinate: Coordinate,
+    val estimatedFillLevel: Double?,
+    val riskLevel: String?,
+    val daysToFull: Int?
 )

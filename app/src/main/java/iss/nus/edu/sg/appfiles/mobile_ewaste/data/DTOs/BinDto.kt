@@ -10,5 +10,8 @@ data class BinDto(
     @SerializedName("binStatus") val binStatus: String?,
     @SerializedName("latitude") val latitude: Double?,
     @SerializedName("longitude") val longitude: Double?,
+    @SerializedName("estimatedFillLevel") val estimatedFillLevel: Double?,
+    @SerializedName("riskLevel") val riskLevel: String?,
+    @SerializedName("daysToFull") val daysToFull: Int?,
     @SerializedName("predictedStatus") val predictedStatus: String?
 )

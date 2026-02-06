@@ -22,6 +22,11 @@ class EwasteRepository(
                     longitude
                 )
 
+                val description = buildDescription(
+                    bin.estimatedFillLevel,
+                    bin.riskLevel,
+                )
+
                 BinLocation(
                     binId = bin.binId,
                     name = bin.locationName?.takeIf { it.isNotBlank() } ?: "E-waste bin",
@@ -30,6 +35,9 @@ class EwasteRepository(
                     access = bin.binStatus?.takeIf { it.isNotBlank() } ?: "Active",
                     predictedStatus = bin.predictedStatus,
                     distanceMeters = distance,
+                    estimatedFillLevel = bin.estimatedFillLevel,
+                    riskLevel = bin.riskLevel,
+                    daysToFull = bin.daysToFull,
                     coordinate = Coordinate(latitude = latitude, longitude = longitude)
                 )
             }
@@ -46,6 +54,13 @@ class EwasteRepository(
         val results = FloatArray(1)
         Location.distanceBetween(startLat, startLng, endLat, endLng, results)
         return results[0]
+    }
+
+    private fun buildDescription(fillLevel: Double?, riskLevel: String?): String {
+        return when {
+            fillLevel != null -> "${fillLevel.toInt()}% full"
+            else -> "Capacity unknown"
+        }
     }
 
 }
