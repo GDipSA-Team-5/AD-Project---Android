@@ -116,11 +116,6 @@
         android:label="Rewards Store" />
 
     <fragment
-        android:id="@+id/profileFragment"
-        android:name="iss.nus.edu.sg.appfiles.mobile_ewaste.fragments.ProfileFragment"
-        android:label="Profile" />
-
-    <fragment
         android:id="@+id/guidelinesFragment"
         android:name="iss.nus.edu.sg.appfiles.mobile_ewaste.fragments.GuidelinesFragment"
         android:label="Guidelines" />
@@ -129,5 +124,21 @@
         android:id="@+id/historyFragment"
         android:name="iss.nus.edu.sg.appfiles.mobile_ewaste.fragments.DisposalHistoryFragment"
         android:label="History" />
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="iss.nus.edu.sg.appfiles.mobile_ewaste.fragments.ProfileFragment"
+        android:label="Profile">
+
+        <action
+            android:id="@+id/action_profile_to_editProfile"
+            app:destination="@id/editProfileFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="iss.nus.edu.sg.appfiles.mobile_ewaste.fragments.EditProfileFragment"
+        android:label="Edit Profile"/>
+
 
 </navigation>
