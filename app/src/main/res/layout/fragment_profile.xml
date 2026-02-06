@@ -64,7 +64,7 @@
                 </LinearLayout>
 
                 <Button
-                    android:id="@+id/btnEdit"
+                    android:id="@+id/buttonEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="36dp"
                     android:background="@drawable/bg_button_outline"
