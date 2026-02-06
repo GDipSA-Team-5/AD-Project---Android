@@ -2,6 +2,7 @@ package iss.nus.edu.sg.appfiles.mobile_ewaste.fragments
 
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -26,6 +27,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
         fragmentBinding.redeemedList.layoutManager = LinearLayoutManager(requireContext())
         fragmentBinding.redeemedList.adapter = redemptionAdapter
+        val btnEdit = view.findViewById<TextView>(R.id.btnEdit)
+        btnEdit.setOnClickListener {
+            findNavController().navigate(R.id.action_profile_to_editProfile)
+        }
 
         setupLogout(fragmentBinding)
         loadProfile(fragmentBinding)
