@@ -53,7 +53,8 @@ class CreateAccountFragment : Fragment(R.layout.fragment_create_account) {
                 validateRequired(email, "Email is required") &&
                 validateEmail(email, emailValue) &&
                 validateRequired(phone, "Phone is required") &&
-                validateRequired(password, "Password is required")
+                validateRequired(password, "Password is required") &&
+                validatePassword(password)
 
             if (valid) {
                 val selectedRegionId = getSelectedRegionId(regionId)
@@ -131,6 +132,17 @@ class CreateAccountFragment : Fragment(R.layout.fragment_create_account) {
     private fun validateEmail(input: EditText, value: String): Boolean {
         return if (!Patterns.EMAIL_ADDRESS.matcher(value).matches()) {
             input.error = "Invalid email"
+            false
+        } else {
+            input.error = null
+            true
+        }
+    }
+
+    private fun validatePassword(input: EditText): Boolean {
+        val value = input.text?.toString().orEmpty()
+        return if (value.length < 6) {
+            input.error = "Password must be at least 6 characters"
             false
         } else {
             input.error = null
