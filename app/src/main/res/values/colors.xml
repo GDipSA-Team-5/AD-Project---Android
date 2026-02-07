@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="app_background">#F6F7F9</color>
     <color name="text_primary">#1F2A37</color>
@@ -18,6 +17,5 @@
     <color name="circle_green_light">#E6F7EC</color>
     <color name="circle_blue_light">#E1ECFF</color>
     <color name="circle_purple_light">#EFE6FF</color>
-    <color name="map_placeholder">#E9ECEF</color>
     <color name="brand_red">#EB0019</color>
 </resources>
