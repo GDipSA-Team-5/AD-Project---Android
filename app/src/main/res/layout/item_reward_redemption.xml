@@ -52,19 +52,25 @@
             android:gravity="end"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/rewardPoints"
+            <Button
+                android:id="@+id/rewardUseButton"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/brand_green"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:layout_height="32dp"
+                android:background="@drawable/bg_button"
+                android:minWidth="0dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="3dp"
+                android:text="USE"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/rewardStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="3dp"
                 android:textColor="@color/text_secondary"
                 android:textSize="12sp" />
 
