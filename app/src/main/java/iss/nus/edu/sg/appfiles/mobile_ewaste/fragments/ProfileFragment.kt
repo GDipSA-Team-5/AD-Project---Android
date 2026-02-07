@@ -17,7 +17,9 @@ import kotlinx.coroutines.launch
 
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private var binding: FragmentProfileBinding? = null
-    private val redemptionAdapter = RewardRedemptionAdapter()
+    private val redemptionAdapter = RewardRedemptionAdapter { item ->
+        onUseRedemption(item.redemptionId)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -55,6 +57,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             toast("Please login first")
             return
         }
+        redemptionAdapter.setUserId(userId)
 
         fragmentBinding.redeemedLoading.visibility = View.VISIBLE
         fragmentBinding.redeemedEmpty.visibility = View.GONE
@@ -82,5 +85,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private fun toast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun onUseRedemption(redemptionId: Int) {
+        // No-op for now; UI already shows the code.
     }
 }

@@ -10,8 +10,10 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class RewardRedemptionAdapter(
-    private var items: List<RewardRedemptionItemDto> = emptyList()
+    private var items: List<RewardRedemptionItemDto> = emptyList(),
+    private val onUse: (RewardRedemptionItemDto) -> Unit = {}
 ) : RecyclerView.Adapter<RewardRedemptionAdapter.ViewHolder>() {
+    private var userId: Int? = null
 
     class ViewHolder(val binding: ItemRewardRedemptionBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -28,10 +30,15 @@ class RewardRedemptionAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
         holder.binding.rewardTitle.text = item.rewardName
-        holder.binding.rewardPoints.text = "-${item.pointsUsed} pts"
         holder.binding.rewardStatus.text = item.redemptionStatus
         holder.binding.rewardDate.text = formatDate(item.redemptionDateTime)
         holder.binding.rewardThumb.load(item.imageUrl)
+        holder.binding.rewardUseButton.setOnClickListener {
+            val code = userId?.let { "Code: U${it}R${item.redemptionId}" } ?: "Code: UR${item.redemptionId}"
+            holder.binding.rewardUseButton.text = code
+            holder.binding.rewardUseButton.isEnabled = false
+            onUse(item)
+        }
     }
 
     override fun getItemCount(): Int = items.size
@@ -39,6 +46,10 @@ class RewardRedemptionAdapter(
     fun submitList(newItems: List<RewardRedemptionItemDto>) {
         items = newItems
         notifyDataSetChanged()
+    }
+
+    fun setUserId(id: Int?) {
+        userId = id
     }
 
     private fun formatDate(raw: String): String {
