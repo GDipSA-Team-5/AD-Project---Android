@@ -214,7 +214,6 @@ class LocateFragment : Fragment(R.layout.fragment_locate) {
 
     private fun getFillStatusText(fillLevel: Double): String {
         return when {
-            fillLevel == null -> "Capacity unknown"
             fillLevel >= 90 -> "Almost full - Limited space"
             fillLevel >= 70 -> "Filling up - Some space available"
             fillLevel >= 50 -> "Half full - Space available"
