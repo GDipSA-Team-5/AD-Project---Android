@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.RewardCatalogueDto
 import iss.nus.edu.sg.appfiles.mobile_ewaste.databinding.ItemRewardCatalogueBinding
+import iss.nus.edu.sg.appfiles.mobile_ewaste.ui.rewards.RewardsRules
 
 class RewardsCatalogueAdapter(
     private var items: List<RewardCatalogueDto> = emptyList(),
@@ -35,7 +36,12 @@ class RewardsCatalogueAdapter(
 
         holder.binding.rewardImage.load(item.imageUrl)
 
-        val redeemEnabled = item.availability && item.stockQuantity > 0 && item.points <= availablePoints
+        val redeemEnabled = RewardsRules.canRedeem(
+            availablePoints = availablePoints,
+            rewardPoints = item.points,
+            rewardAvailable = item.availability,
+            stockQuantity = item.stockQuantity
+        )
         holder.binding.redeemButton.isEnabled = redeemEnabled
         holder.binding.redeemButton.alpha = if (redeemEnabled) 1f else 0.5f
         holder.binding.redeemButton.setOnClickListener {

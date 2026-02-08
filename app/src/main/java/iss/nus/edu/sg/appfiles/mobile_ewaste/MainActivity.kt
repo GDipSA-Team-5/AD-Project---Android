@@ -5,10 +5,12 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.SessionManager
+import iss.nus.edu.sg.appfiles.mobile_ewaste.navigation.SessionNavigationPolicy
 
 class MainActivity : AppCompatActivity() {
 
@@ -44,12 +46,22 @@ class MainActivity : AppCompatActivity() {
         }
 
         val session = SessionManager(this)
-        if (!session.isLoggedIn() && navController.currentDestination?.id != R.id.loginFragment) {
+        val currentDestId = navController.currentDestination?.id
+        val targetDestination = SessionNavigationPolicy.destinationFor(
+            loggedIn = session.isLoggedIn(),
+            currentDestinationId = currentDestId
+        )
+        if (targetDestination != null) {
+            val popUpTarget = if (targetDestination == R.id.homeFragment) {
+                R.id.loginFragment
+            } else {
+                R.id.homeFragment
+            }
             navController.navigate(
-                R.id.loginFragment,
+                targetDestination,
                 null,
-                androidx.navigation.NavOptions.Builder()
-                    .setPopUpTo(R.id.homeFragment, true)
+                NavOptions.Builder()
+                    .setPopUpTo(popUpTarget, true)
                     .build()
             )
         }
