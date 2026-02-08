@@ -1,9 +1,7 @@
 package iss.nus.edu.sg.appfiles.mobile_ewaste.fragments
 
 import android.os.Bundle
-import android.util.Patterns
 import android.view.View
-import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -16,6 +14,7 @@ import iss.nus.edu.sg.appfiles.mobile_ewaste.R
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.SessionManager
 import iss.nus.edu.sg.appfiles.mobile_ewaste.databinding.FragmentLoginBinding
 import iss.nus.edu.sg.appfiles.mobile_ewaste.ui.auth.AuthUiState
+import iss.nus.edu.sg.appfiles.mobile_ewaste.ui.auth.LoginFormValidator
 import iss.nus.edu.sg.appfiles.mobile_ewaste.ui.auth.LoginEvent
 import iss.nus.edu.sg.appfiles.mobile_ewaste.ui.auth.LoginViewModel
 import kotlinx.coroutines.launch
@@ -44,11 +43,11 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             val email = emailInput.text?.toString()?.trim().orEmpty()
             val password = passwordInput.text?.toString().orEmpty()
 
-            val emailValid = validateRequired(emailInput, "Email is required") &&
-                validateEmail(emailInput, email)
-            val passwordValid = validateRequired(passwordInput, "Password is required")
+            val validation = LoginFormValidator.validate(email, password)
+            emailInput.error = validation.emailError
+            passwordInput.error = validation.passwordError
 
-            if (emailValid && passwordValid) {
+            if (validation.isValid) {
                 viewModel.login(email, password)
             }
         }
@@ -91,24 +90,4 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         fragmentBinding.buttonLogin.isEnabled = !state.isLoading
     }
 
-    private fun validateRequired(input: EditText, message: String): Boolean {
-        val text = input.text?.toString()?.trim().orEmpty()
-        return if (text.isEmpty()) {
-            input.error = message
-            false
-        } else {
-            input.error = null
-            true
-        }
-    }
-
-    private fun validateEmail(input: EditText, value: String): Boolean {
-        return if (!Patterns.EMAIL_ADDRESS.matcher(value).matches()) {
-            input.error = "Invalid email"
-            false
-        } else {
-            input.error = null
-            true
-        }
-    }
 }

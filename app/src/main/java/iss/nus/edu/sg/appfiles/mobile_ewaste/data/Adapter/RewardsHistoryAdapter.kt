@@ -7,8 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import iss.nus.edu.sg.appfiles.mobile_ewaste.R
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.RewardsHistoryDto
 import iss.nus.edu.sg.appfiles.mobile_ewaste.databinding.FragmentItemRewardsHistoryBinding
-import java.text.SimpleDateFormat
-import java.util.Locale
+import iss.nus.edu.sg.appfiles.mobile_ewaste.ui.rewards.RewardsHistoryDateFormatter
 
 class RewardsHistoryAdapter(private var items:List<RewardsHistoryDto> = emptyList())
     : RecyclerView.Adapter<RewardsHistoryAdapter.ViewHolder>() {
@@ -28,7 +27,7 @@ class RewardsHistoryAdapter(private var items:List<RewardsHistoryDto> = emptyLis
             val item = items[position]
 
         holder.binding.tvTitle.text = item.title
-        holder.binding.tvDate.text = formatDate(item.createdAt)
+        holder.binding.tvDate.text = RewardsHistoryDateFormatter.format(item.createdAt)
         if (item.points >= 0) {
             holder.binding.tvPoints.text = "+${item.points}"
             holder.binding.tvPoints.setTextColor(0xFF16A34A.toInt())
@@ -50,13 +49,4 @@ class RewardsHistoryAdapter(private var items:List<RewardsHistoryDto> = emptyLis
         notifyDataSetChanged()
     }
 
-    private fun formatDate(raw: String): String {
-        return try {
-            val input = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
-            val output = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
-            output.format(input.parse(raw)!!)
-        } catch (e: Exception) {
-            raw
-        }
-    }
-    }
+}

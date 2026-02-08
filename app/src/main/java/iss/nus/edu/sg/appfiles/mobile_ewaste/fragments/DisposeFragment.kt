@@ -164,10 +164,15 @@ class DisposeFragment : Fragment(R.layout.fragment_dispose) {
         val weightStr = binding.etEstimatedWeight.text.toString().trim()
         val feedback = binding.etFeedback.text.toString().trim()
 
-        if (categoryPos == 0) return toast("Select category")
-        if (itemTypePos == 0) return toast("Select item type")
-        if (serialNo.isEmpty()) return toast("Serial number required")
-        if (weightStr.isEmpty()) return toast("Estimated weight required")
+        val validationError = DisposeFormValidator.validate(
+            DisposeFormInput(
+                categoryPosition = categoryPos,
+                itemTypePosition = itemTypePos,
+                serialNo = serialNo,
+                weightText = weightStr
+            )
+        )
+        if (validationError != null) return toast(validationError)
 
         val weight = weightStr.toDoubleOrNull()
             ?: return toast("Invalid weight")
