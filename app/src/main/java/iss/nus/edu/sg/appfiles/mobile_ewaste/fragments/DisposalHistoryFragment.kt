@@ -58,7 +58,8 @@ class DisposalHistoryFragment : Fragment(R.layout.fragment_disposal_history) {
     }
 
     private fun toast(msg:String){
-        Toast.makeText(requireContext(),msg, Toast.LENGTH_SHORT).show()
+        val ctx = context ?: return
+        Toast.makeText(ctx, msg, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {
