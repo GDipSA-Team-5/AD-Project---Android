@@ -23,11 +23,10 @@ jobs:
           java-version: "17"
           cache: "gradle"
 
+      - name: Set up Snyk CLI
+        uses: snyk/actions/setup@master
+
       - name: Snyk Test
-        uses: snyk/actions/gradle@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-          JAVA_HOME: /usr/lib/jvm/java-17-openjdk
-          SNYK_JAVA_HOME: /usr/lib/jvm/java-17-openjdk
-        with:
-          args: --all-sub-projects
+        run: snyk test --all-sub-projects
