@@ -25,5 +25,5 @@ CI runs on push/PR to `main` with:
 - Unit tests + JaCoCo coverage
 - Android Lint
 - SonarCloud analysis
-- GitHub CodeQL scan
+- GitHub CodeQL scan.
 
