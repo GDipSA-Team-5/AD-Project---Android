@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id ("androidx.navigation.safeargs.kotlin")
     alias(libs.plugins.sonarqube)
     jacoco
 }
@@ -80,63 +81,62 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 }
+    tasks.register<JacocoReport>("jacocoTestReport") {
+        dependsOn("testDebugUnitTest")
 
-tasks.register<JacocoReport>("jacocoTestReport") {
-    dependsOn("testDebugUnitTest")
-
-    reports {
-        xml.required.set(true)
-        html.required.set(true)
-        csv.required.set(false)
-    }
-
-    val kotlinDebugTree = fileTree("${layout.buildDirectory.get()}/tmp/kotlin-classes/debug") {
-        exclude(
-            "**/R.class",
-            "**/R$*.class",
-            "**/BuildConfig.*",
-            "**/Manifest*.*",
-            "**/*Test*.*",
-            "android/**/*.*"
-        )
-    }
-    val javaDebugTree = fileTree("${layout.buildDirectory.get()}/intermediates/javac/debug/classes") {
-        exclude(
-            "**/R.class",
-            "**/R$*.class",
-            "**/BuildConfig.*",
-            "**/Manifest*.*",
-            "**/*Test*.*",
-            "android/**/*.*"
-        )
-    }
-
-    classDirectories.setFrom(files(kotlinDebugTree, javaDebugTree))
-    sourceDirectories.setFrom(files("src/main/java", "src/main/kotlin"))
-    executionData.setFrom(
-        fileTree(layout.buildDirectory.get().asFile) {
-            include("jacoco/testDebugUnitTest.exec")
+        reports {
+            xml.required.set(true)
+            html.required.set(true)
+            csv.required.set(false)
         }
-    )
-}
 
-sonar {
-    properties {
-        property("sonar.projectKey", "GDipSA-Team-5_AD-Project---Android")
-        property("sonar.organization", "gdipsa-team-5")
-        property("sonar.host.url", "https://sonarcloud.io")
-        property("sonar.sources", "src/main/java,src/main/res")
-        property("sonar.tests", "src/test/java,src/androidTest/java")
-        property("sonar.exclusions", "**/build/**")
-        property("sonar.java.binaries", "build/tmp/kotlin-classes/debug,build/intermediates/javac/debug/classes")
-        property(
-            "sonar.coverage.jacoco.xmlReportPaths",
-            "build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
+        val kotlinDebugTree = fileTree("${layout.buildDirectory.get()}/tmp/kotlin-classes/debug") {
+            exclude(
+                "**/R.class",
+                "**/R$*.class",
+                "**/BuildConfig.*",
+                "**/Manifest*.*",
+                "**/*Test*.*",
+                "android/**/*.*"
+            )
+        }
+        val javaDebugTree = fileTree("${layout.buildDirectory.get()}/intermediates/javac/debug/classes") {
+            exclude(
+                "**/R.class",
+                "**/R$*.class",
+                "**/BuildConfig.*",
+                "**/Manifest*.*",
+                "**/*Test*.*",
+                "android/**/*.*"
+            )
+        }
+
+        classDirectories.setFrom(files(kotlinDebugTree, javaDebugTree))
+        sourceDirectories.setFrom(files("src/main/java", "src/main/kotlin"))
+        executionData.setFrom(
+            fileTree(layout.buildDirectory.get().asFile) {
+                include("jacoco/testDebugUnitTest.exec")
+            }
         )
-        property("sonar.androidLint.reportPaths", "build/reports/lint-results-debug.xml")
     }
-}
 
-tasks.named("sonar") {
-    dependsOn("jacocoTestReport", "lintDebug", "testDebugUnitTest")
-}
+    sonar {
+        properties {
+            property("sonar.projectKey", "GDipSA-Team-5_AD-Project---Android")
+            property("sonar.organization", "gdipsa-team-5")
+            property("sonar.host.url", "https://sonarcloud.io")
+            property("sonar.sources", "src/main/java,src/main/res")
+            property("sonar.tests", "src/test/java,src/androidTest/java")
+            property("sonar.exclusions", "**/build/**")
+            property("sonar.java.binaries", "build/tmp/kotlin-classes/debug,build/intermediates/javac/debug/classes")
+            property(
+                "sonar.coverage.jacoco.xmlReportPaths",
+                "build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
+            )
+            property("sonar.androidLint.reportPaths", "build/reports/lint-results-debug.xml")
+        }
+    }
+
+    tasks.named("sonar") {
+        dependsOn("jacocoTestReport", "lintDebug", "testDebugUnitTest")
+    }

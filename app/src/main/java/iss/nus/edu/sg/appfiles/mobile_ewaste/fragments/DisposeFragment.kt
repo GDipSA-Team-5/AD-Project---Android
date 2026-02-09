@@ -9,13 +9,16 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import iss.nus.edu.sg.appfiles.mobile_ewaste.R
-import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.*
+import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.CategoryDto
+import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.CreateDisposalLogRequest
+import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.ItemTypeDto
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.SessionManager
 import iss.nus.edu.sg.appfiles.mobile_ewaste.databinding.FragmentDisposeBinding
 import iss.nus.edu.sg.appfiles.mobile_ewaste.network.ApiClient
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 class DisposeFragment : Fragment(R.layout.fragment_dispose) {
 
@@ -32,17 +35,22 @@ class DisposeFragment : Fragment(R.layout.fragment_dispose) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentDisposeBinding.bind(view)
 
+        val args = DisposeFragmentArgs.fromBundle(requireArguments())
+
+        if (args.selectedBinId > 0) {
+            selectedBinId = args.selectedBinId
+            selectedBinLabel = args.selectedBinLabel
+            updateBinButtonText()
+        }
         setupTimestamp()
         setupButtons()
-        setupBinResultListener()
-
         applySelectedBinFromArgs()
-        updateBinButtonText()
-
         loadCategories()
         resetItemTypeSpinner()
     }
 
+    private fun updateBinButtonText() {
+        binding.btnSelectBin.text = selectedBinLabel?:"Bin #$selectedBinId"}
 
     private fun setupTimestamp() {
         val fmt = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
@@ -51,7 +59,7 @@ class DisposeFragment : Fragment(R.layout.fragment_dispose) {
 
     private fun setupButtons() {
         binding.btnSelectBin.setOnClickListener {
-            findNavController().navigate(R.id.locateFragment)
+            findNavController().navigate(R.id.qrScanFragment)
         }
         binding.buttonLogDisposal.setOnClickListener { submit() }
     }
@@ -97,7 +105,12 @@ class DisposeFragment : Fragment(R.layout.fragment_dispose) {
                     loadItemTypes(categories[position - 1].categoryId)
                 }
 
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    // Intentionally left empty:
+                    // This callback is required by OnItemSelectedListener,
+                    // but our UI always has a default selection,
+                    // so this state will never be triggered.
+                }
             }
     }
 
@@ -132,7 +145,14 @@ class DisposeFragment : Fragment(R.layout.fragment_dispose) {
                             )
                         }
 
-                        override fun onNothingSelected(parent: AdapterView<*>?) {}
+                        override fun onNothingSelected(parent: AdapterView<*>?)
+                            {
+                                // Intentionally left empty:
+                                // This callback is required by OnItemSelectedListener,
+                                // but our UI always has a default selection,
+                                // so this state will never be triggered.
+                            }
+
                     }
 
             } catch (e: Exception) {
@@ -227,26 +247,6 @@ class DisposeFragment : Fragment(R.layout.fragment_dispose) {
         binding.buttonLogDisposal.isEnabled = !loading
     }
 
-    private fun setupBinResultListener() {
-        val savedStateHandle = findNavController().currentBackStackEntry?.savedStateHandle
-
-        savedStateHandle?.getLiveData<Int>("selectedBinId")
-            ?.observe(viewLifecycleOwner) { id ->
-                if (id > 0) {
-                    selectedBinId = id
-                    selectedBinLabel = savedStateHandle.get<String>("selectedBinLabel")
-                    updateBinButtonText()
-                }
-            }
-
-        savedStateHandle?.getLiveData<String>("selectedBinLabel")
-            ?.observe(viewLifecycleOwner) { label ->
-                if (!label.isNullOrBlank()) {
-                    selectedBinLabel = label
-                    updateBinButtonText()
-                }
-            }
-    }
 
     private fun applySelectedBinFromArgs() {
         val argBinId = arguments?.getInt("selectedBinId")?.takeIf { it > 0 }
@@ -260,17 +260,6 @@ class DisposeFragment : Fragment(R.layout.fragment_dispose) {
         }
     }
 
-    private fun updateBinButtonText() {
-        val label = selectedBinLabel?.takeIf { it.isNotBlank() }
-        val id = selectedBinId
-        binding.btnSelectBin.text = if (id != null && label != null) {
-            "Bin $id - $label"
-        } else if (id != null) {
-            "Bin $id"
-        } else {
-            "Select bin"
-        }
-    }
 
     private fun toast(msg: String) {
         Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()

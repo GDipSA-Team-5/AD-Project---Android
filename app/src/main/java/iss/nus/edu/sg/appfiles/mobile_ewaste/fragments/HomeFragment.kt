@@ -82,8 +82,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun setupYourImpact(fragmentBinding: FragmentHomeBinding){
         val userId = SessionManager(requireContext()).userId()
         if (userId == null) {
-            fragmentBinding.totalEwaste.text = "0.0 kg"
-            fragmentBinding.totalCO2.text = "0.0 kg"
+            fragmentBinding.totalEwaste.text = "0"
+            fragmentBinding.totalCO2.text = "0"
             fragmentBinding.totalDispose.text = "0"
             return
         }
@@ -105,8 +105,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 fragmentBinding.totalDispose.text =
                     totalCount.toString()
             }.onFailure {
-                fragmentBinding.totalEwaste.text = "0.0 kg"
-                fragmentBinding.totalCO2.text = "0.0 kg"
+                fragmentBinding.totalEwaste.text = "0"
+                fragmentBinding.totalCO2.text = "0"
                 fragmentBinding.totalDispose.text="0"
             }
         }
