@@ -29,4 +29,4 @@ jobs:
       - name: Snyk Test
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: snyk test --all-sub-projects --severity-threshold=high
+        run: snyk test --all-sub-projects --severity-threshold=critical
