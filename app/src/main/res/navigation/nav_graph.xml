@@ -140,5 +140,12 @@
         android:name="iss.nus.edu.sg.appfiles.mobile_ewaste.fragments.EditProfileFragment"
         android:label="Edit Profile"/>
 
-
+    <fragment
+        android:id="@+id/qrScanFragment"
+        android:name="iss.nus.edu.sg.appfiles.mobile_ewaste.fragments.QrScanFragment"
+        android:label="QR Scan">
+        <action
+            android:id="@+id/action_qrScanFragment_to_disposeFragment"
+            app:destination="@id/disposeFragment"/>
+    </fragment>
 </navigation>
