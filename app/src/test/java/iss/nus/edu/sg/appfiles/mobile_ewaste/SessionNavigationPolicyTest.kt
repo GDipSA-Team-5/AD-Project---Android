@@ -45,4 +45,14 @@ class SessionNavigationPolicyTest {
 
         assertEquals(null, target)
     }
+
+    @Test
+    fun destinationFor_returnsNull_whenDestinationIsNull() {
+        val target = SessionNavigationPolicy.destinationFor(
+            loggedIn = false,
+            currentDestinationId = null
+        )
+
+        assertEquals(null, target)
+    }
 }

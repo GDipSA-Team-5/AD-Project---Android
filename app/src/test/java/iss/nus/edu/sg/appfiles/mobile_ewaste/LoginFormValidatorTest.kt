@@ -42,4 +42,22 @@ class LoginFormValidatorTest {
         assertEquals(null, result.passwordError)
         assertTrue(result.isValid)
     }
+
+    @Test
+    fun validate_trimsEmail_beforeValidation() {
+        val result = LoginFormValidator.validate(email = "  user@test.com  ", password = "secret")
+
+        assertEquals(null, result.emailError)
+        assertEquals(null, result.passwordError)
+        assertTrue(result.isValid)
+    }
+
+    @Test
+    fun validate_returnsBothErrors_whenEmailAndPasswordInvalid() {
+        val result = LoginFormValidator.validate(email = "bad-email", password = "")
+
+        assertEquals("Invalid email", result.emailError)
+        assertEquals("Password is required", result.passwordError)
+        assertTrue(!result.isValid)
+    }
 }
