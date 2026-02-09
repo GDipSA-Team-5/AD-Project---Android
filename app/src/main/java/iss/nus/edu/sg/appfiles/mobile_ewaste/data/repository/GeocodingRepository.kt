@@ -4,6 +4,7 @@ import android.content.Context
 import android.location.Address
 import android.location.Geocoder
 import android.os.Build
+import androidx.annotation.RequiresApi
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.model.Coordinate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -29,6 +30,7 @@ class GeocodingRepository(private val context: Context) {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private suspend fun geocodeAsync(geocoder: Geocoder, query: String): Address? {
         return suspendCancellableCoroutine { cont ->
             geocoder.getFromLocationName(query, 1, object : Geocoder.GeocodeListener {
