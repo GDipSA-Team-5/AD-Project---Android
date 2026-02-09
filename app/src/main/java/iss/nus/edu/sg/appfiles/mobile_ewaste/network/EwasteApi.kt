@@ -13,6 +13,11 @@ import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.RedeemRequestDto
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.RedeemResponseDto
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.RewardRedemptionItemDto
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.UserProfileDto
+import iss.nus.edu.sg.appfiles.mobile_ewaste.network.model.LoginRequest
+import iss.nus.edu.sg.appfiles.mobile_ewaste.network.model.LoginResponse
+import iss.nus.edu.sg.appfiles.mobile_ewaste.network.model.RegisterRequest
+import iss.nus.edu.sg.appfiles.mobile_ewaste.network.model.RegisterResponse
+import iss.nus.edu.sg.appfiles.mobile_ewaste.network.model.RegionDto
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
@@ -20,6 +25,15 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface EwasteApi {
+    @POST("api/auth/register")
+    suspend fun register(@Body request: RegisterRequest): RegisterResponse
+
+    @POST("api/auth/login")
+    suspend fun login(@Body request: LoginRequest): LoginResponse
+
+    @GET("api/auth/regions")
+    suspend fun getRegions(): List<RegionDto>
+
     @GET("api/auth/profile")
     suspend fun  getUser(@Query("userId")userId: Int): UserProfileDto
 
