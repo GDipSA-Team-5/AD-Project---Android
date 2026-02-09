@@ -31,6 +31,27 @@ jobs:
       - name: Unit Tests + Coverage + Lint
         run: ./gradlew testDebugUnitTest jacocoTestReport lintDebug
 
+      - name: Generate Reports Index
+        run: |
+          cat > app/build/reports/index.html <<'EOF'
+          <!doctype html>
+          <html>
+            <head>
+              <meta charset="utf-8" />
+              <title>AD-Project Reports</title>
+            </head>
+            <body>
+              <h1>AD-Project Reports</h1>
+              <ul>
+                <li><a href="lint-results-debug.html">Android Lint (Debug)</a></li>
+                <li><a href="jacoco/jacocoTestReport/html/index.html">JaCoCo Coverage</a></li>
+                <li><a href="https://sonarcloud.io/dashboard?id=GDipSA-Team-5_AD-Project---Android">SonarCloud Dashboard</a></li>
+                <li><a href="https://github.com/GDipSA-Team-5/AD-Project---Android/security/code-scanning">GitHub CodeQL Alerts</a></li>
+              </ul>
+            </body>
+          </html>
+          EOF
+
       - name: SonarCloud Scan
         if: github.actor != 'dependabot[bot]'
         env:
