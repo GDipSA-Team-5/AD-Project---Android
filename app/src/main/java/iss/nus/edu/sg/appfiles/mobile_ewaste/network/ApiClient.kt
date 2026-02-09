@@ -22,7 +22,5 @@ object ApiClient {
         .client(httpClient)
         .build()
 
-    val authApi: AuthApi = retrofit.create(AuthApi::class.java)
     val ewasteApi: EwasteApi = retrofit.create(EwasteApi::class.java)
-    val regionApi: RegionApi = retrofit.create(RegionApi::class.java)
 }
