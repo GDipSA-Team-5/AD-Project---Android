@@ -125,7 +125,7 @@ sonar {
         property("sonar.projectKey", "GDipSA-Team-5_AD-Project---Android")
         property("sonar.organization", "gdipsa-team-5")
         property("sonar.host.url", "https://sonarcloud.io")
-        property("sonar.sources", "src/main/java,src/main/kotlin,src/main/res")
+        property("sonar.sources", "src/main/java,src/main/res")
         property("sonar.tests", "src/test/java,src/androidTest/java")
         property("sonar.exclusions", "**/build/**")
         property("sonar.java.binaries", "build/tmp/kotlin-classes/debug,build/intermediates/javac/debug/classes")
