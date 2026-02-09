@@ -26,4 +26,11 @@ class EWasteCategoryTest {
 
         assertEquals(EWasteCategory.OTHER, result)
     }
+
+    @Test
+    fun from_returnsConsumerElectronics_whenNameMatches() {
+        val result = EWasteCategory.from("Consumer Electronics")
+
+        assertEquals(EWasteCategory.CONSUMER_ELECTRONICS, result)
+    }
 }

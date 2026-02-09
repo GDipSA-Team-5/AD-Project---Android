@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+  pull-requests: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-test-sonar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+          cache: "gradle"
+
+      - name: Unit Tests + Coverage + Lint
+        run: ./gradlew testDebugUnitTest jacocoTestReport lintDebug
+
+      - name: Copy Reports Index
+        run: cp .github/pages/index.html app/build/reports/index.html
+
+      - name: SonarCloud Scan
+        if: github.actor != 'dependabot[bot]'
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew :app:sonar -Dsonar.projectBaseDir=${GITHUB_WORKSPACE}/app -Dsonar.sources=src/main/java,src/main/res -Dsonar.token=$SONAR_TOKEN -Dsonar.qualitygate.wait=true
+
+      - name: Upload Jacoco Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: app/build/reports/jacoco
+
+      - name: Upload Lint Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-report
+          path: app/build/reports/lint-results-debug.html
+
+      - name: Upload Reports to Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: app/build/reports
+
+  deploy-pages:
+    needs: build-test-sonar
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4

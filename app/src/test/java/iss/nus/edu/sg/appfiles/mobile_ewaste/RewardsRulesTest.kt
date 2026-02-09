@@ -54,4 +54,28 @@ class RewardsRulesTest {
 
         assertFalse(result)
     }
+
+    @Test
+    fun canRedeem_returnsTrue_whenPointsExactlyEqual() {
+        val result = RewardsRules.canRedeem(
+            availablePoints = 500,
+            rewardPoints = 500,
+            rewardAvailable = true,
+            stockQuantity = 1
+        )
+
+        assertTrue(result)
+    }
+
+    @Test
+    fun canRedeem_returnsFalse_whenStockIsNegative() {
+        val result = RewardsRules.canRedeem(
+            availablePoints = 500,
+            rewardPoints = 200,
+            rewardAvailable = true,
+            stockQuantity = -1
+        )
+
+        assertFalse(result)
+    }
 }
