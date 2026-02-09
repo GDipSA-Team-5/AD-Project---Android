@@ -16,7 +16,7 @@ lifecycle = "2.8.7"
 viewModel = "2.8.7"
 playServicesLocation = "21.3.0"
 osmdroid = "6.1.18"
-coil = "2.6.0"
+coil = "2.7.0"
 securityCrypto = "1.1.0-alpha06"
 sonarqube = "5.0.0.4638"
 
