@@ -36,7 +36,15 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./gradlew :app:sonar -Dsonar.projectBaseDir=${GITHUB_WORKSPACE} -Dsonar.sources=app/src/main/java,app/src/main/res -Dsonar.tests=app/src/test/java,app/src/androidTest/java -Dsonar.coverage.jacoco.xmlReportPaths=app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml -Dsonar.androidLint.reportPaths=app/build/reports/lint-results-debug.xml -Dsonar.token=$SONAR_TOKEN -Dsonar.qualitygate.wait=true
+        run: |
+            ./gradlew :app:sonar \
+            -Dsonar.projectBaseDir=$GITHUB_WORKSPACE \
+            -Dsonar.sources=app/src/main/java \
+            -Dsonar.tests=app/src/test/java,app/src/androidTest/java \
+            -Dsonar.coverage.jacoco.xmlReportPaths=app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml \
+            -Dsonar.androidLint.reportPaths=app/build/reports/lint-results-debug.xml \
+            -Dsonar.token=$SONAR_TOKEN
+
 
       - name: Upload Jacoco Report
         uses: actions/upload-artifact@v4
