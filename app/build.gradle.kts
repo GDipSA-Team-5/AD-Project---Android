@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.sonarqube)
     jacoco
 }
 
@@ -115,4 +116,24 @@ tasks.register<JacocoReport>("jacocoTestReport") {
             include("jacoco/testDebugUnitTest.exec")
         }
     )
+}
+
+sonar {
+    properties {
+        property("sonar.projectKey", "GDipSA-Team-5_AD-Project---Android")
+        property("sonar.organization", "gdipsa-team-5")
+        property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.sources", "src/main/java")
+        property("sonar.tests", "src/test/java,src/androidTest/java")
+        property("sonar.java.binaries", "build/tmp/kotlin-classes/debug,build/intermediates/javac/debug/classes")
+        property(
+            "sonar.coverage.jacoco.xmlReportPaths",
+            "build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
+        )
+        property("sonar.androidLint.reportPaths", "build/reports/lint-results-debug.xml")
+    }
+}
+
+tasks.named("sonar") {
+    dependsOn("jacocoTestReport", "lintDebug", "testDebugUnitTest")
 }
