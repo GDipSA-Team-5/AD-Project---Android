@@ -13,6 +13,8 @@ import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.RewardWalletDto
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.RewardsHistoryDto
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.RewardsSummaryDto
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.UserProfileDto
+import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.UseRedemptionRequestDto
+import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.UseRedemptionResponseDto
 import iss.nus.edu.sg.appfiles.mobile_ewaste.network.model.LoginRequest
 import iss.nus.edu.sg.appfiles.mobile_ewaste.network.model.LoginResponse
 import iss.nus.edu.sg.appfiles.mobile_ewaste.network.model.RegionDto
@@ -77,4 +79,9 @@ interface EwasteApi {
     @GET("api/rewards/redemptions")
     suspend fun getRewardRedemptions(
         @Query("userId")userId: Int): List<RewardRedemptionItemDto>
+
+    @POST("api/rewards/redemptions/use")
+    suspend fun useRewardRedemption(
+        @Body request: UseRedemptionRequestDto
+    ): UseRedemptionResponseDto
 }
