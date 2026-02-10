@@ -1,6 +1,7 @@
 package iss.nus.edu.sg.appfiles.mobile_ewaste.fragments
 
 import android.Manifest
+import androidx.core.graphics.toColorInt
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -160,26 +161,26 @@ class LocateFragment : Fragment(R.layout.fragment_locate) {
                 itemBinding.binDescription.text = "${fillLevel.toInt()}% full • ${getFillStatusText(fillLevel)}"
 
                 val fillColor = when {
-                    fillLevel >= 90 -> Color.parseColor("#DC2626")  // Red
-                    fillLevel >= 70 -> Color.parseColor("#F59E0B")  // Orange
-                    else -> Color.parseColor("#2FAE66")              // Green
+                    fillLevel >= 90 -> "#DC2626".toColorInt()  // Red
+                    fillLevel >= 70 -> "#F59E0B".toColorInt() // Orange
+                    else -> "#2FAE66".toColorInt()            // Green
                 }
                 itemBinding.binDescription.setTextColor(fillColor)
             } ?: run {
                 itemBinding.binDescription.text = "Capacity unknown"
-                itemBinding.binDescription.setTextColor(Color.parseColor("#6B7280"))
+                itemBinding.binDescription.setTextColor("#6B7280".toColorInt())
             }
 
             val isMaintenance = bin.access.equals("Maintenance", ignoreCase = true)
             if (isMaintenance) {
-                itemBinding.binAccess.setTextColor(Color.parseColor("#DC2626"))
+                itemBinding.binAccess.setTextColor("#DC2626".toColorInt())
             } else {
-                itemBinding.binAccess.setTextColor(Color.parseColor("#2FAE66"))
+                itemBinding.binAccess.setTextColor("#2FAE66".toColorInt())
             }
             itemBinding.binSelectButton.isEnabled = !isMaintenance
             if (isMaintenance) {
                 itemBinding.binSelectButton.alpha = 0.5f
-                itemBinding.binCard.setCardBackgroundColor(Color.parseColor("#F3F4F6"))
+                itemBinding.binCard.setCardBackgroundColor("#F3F4F6".toColorInt())
             } else {
                 itemBinding.binSelectButton.alpha = 1f
                 itemBinding.binCard.setCardBackgroundColor(Color.WHITE)

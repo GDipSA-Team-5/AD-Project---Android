@@ -3,14 +3,12 @@ package iss.nus.edu.sg.appfiles.mobile_ewaste.fragments
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.journeyapps.barcodescanner.BarcodeCallback
-import com.journeyapps.barcodescanner.BarcodeResult
 import iss.nus.edu.sg.appfiles.mobile_ewaste.R
 import iss.nus.edu.sg.appfiles.mobile_ewaste.databinding.FragmentQrScanBinding
 
@@ -51,25 +49,23 @@ class QrScanFragment : Fragment(R.layout.fragment_qr_scan) {
             return if (id>0) id else null
         }
     private fun startScanner() {
-        binding.barcodeScanner.decodeContinuous(object : BarcodeCallback {
-            override fun barcodeResult(result: BarcodeResult?) {
-                if (result == null || handled) return
+        binding.barcodeScanner.decodeContinuous { result ->
+            if (handled) return@decodeContinuous
 
-                val raw = result.text ?: return
-                val binId = extractBinId(raw) ?: return
+            val raw = result.text ?: return@decodeContinuous
+            val binId = extractBinId(raw) ?: return@decodeContinuous
 
-                handled = true
-                binding.barcodeScanner.pause()
+            handled = true
+            binding.barcodeScanner.pause()
 
-                val action =
-                    QrScanFragmentDirections.actionQrScanFragmentToDisposeFragment(
-                        selectedBinId = binId,
-                        selectedBinLabel = "Bin #$binId"
-                    )
+            val action =
+                QrScanFragmentDirections.actionQrScanFragmentToDisposeFragment(
+                    selectedBinId = binId,
+                    selectedBinLabel = "Bin #$binId"
+                )
 
-                findNavController().navigate(action)
-            }
-        })
+            findNavController().navigate(action)
+        }
     }
     override fun onResume(){
         super.onResume()
