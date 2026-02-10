@@ -81,8 +81,8 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 }
-    tasks.register<JacocoReport>("jacocoTestReport") {
-        dependsOn("testDebugUnitTest")
+tasks.register<JacocoReport>("jacocoTestReport") {
+    dependsOn("testDebugUnitTest")
 
         reports {
             xml.required.set(true)
@@ -98,8 +98,8 @@ dependencies {
                 "**/Manifest*.*",
                 "**/*Test*.*",
                 "android/**/*.*"
-            )
-        }
+    )
+}
         val javaDebugTree = fileTree("${layout.buildDirectory.get()}/intermediates/javac/debug/classes") {
             exclude(
                 "**/R.class",
