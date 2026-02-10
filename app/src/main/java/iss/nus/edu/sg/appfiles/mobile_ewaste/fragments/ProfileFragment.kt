@@ -66,7 +66,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 val profile = ApiClient.ewasteApi.getUser(userId)
                 fragmentBinding.profileName.text = profile.userName ?: "User"
                 fragmentBinding.profileEmail.text = profile.email ?: "-"
-                fragmentBinding.profilePhone.text = profile.phoneNumber ?: "-"
+
 
                 val redemptions = ApiClient.ewasteApi.getRewardRedemptions(userId)
                 if (redemptions.isEmpty()) {

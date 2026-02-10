@@ -35,28 +35,11 @@
                 android:textStyle="bold"/>
         </LinearLayout>
 
-        <!-- Email -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/hint_email"
-            android:textColor="#777777"
-            android:layout_marginTop="12dp"/>
-
-        <EditText
-            android:id="@+id/etEmail"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@drawable/bg_input"
-            android:padding="16dp"
-            android:inputType="textEmailAddress"
-            android:hint="@string/hint_email"/>
-
         <!-- Phone -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/hint_phone"
+            android:text="@string/phone"
             android:textColor="#777777"
             android:layout_marginTop="16dp"/>
 
@@ -67,13 +50,13 @@
             android:background="@drawable/bg_input"
             android:padding="16dp"
             android:inputType="phone"
-            android:hint="@string/hint_phone"/>
+            android:text="@string/hint_phone"/>
 
         <!-- Address -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/hint_address"
+            android:text="@string/address"
             android:textColor="#777777"
             android:layout_marginTop="16dp"/>
 
@@ -84,6 +67,6 @@
             android:background="@drawable/bg_input"
             android:padding="16dp"
             android:inputType="textPostalAddress"
-            android:hint="@string/hint_address"/>
+            android:text="@string/hint_address"/>
     </LinearLayout>
 </ScrollView>
