@@ -98,7 +98,7 @@
                 android:layout_height="56dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/bg_input"
-                android:hint="+1 234 567 8900"
+                android:hint="+65 -"
                 android:inputType="phone"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"

@@ -8,7 +8,7 @@
     <string name="email">Email</string>
     <string name="hint_email">user@example.com</string>
     <string name="phone">Phone</string>
-    <string name="hint_phone">+65 - .... ....</string>
+    <string name="hint_phone">+65 9786 6789</string>
     <string name="address">Address</string>
     <string name="hint_address">123 Main St, City</string>
     <string name="redeem_reward">Redeem Reward</string>
