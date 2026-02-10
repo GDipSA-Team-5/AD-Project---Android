@@ -74,7 +74,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     fragmentBinding.redeemedEmpty.visibility = View.VISIBLE
                 }
                 redemptionAdapter.submitList(redemptions)
-            } catch (ex: Exception) {
+            } catch (_: Exception) {
                 toast("Failed to load profile")
                 fragmentBinding.redeemedEmpty.visibility = View.VISIBLE
             } finally {
@@ -89,5 +89,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private fun onUseRedemption(redemptionId: Int) {
         // No-op for now; UI already shows the code.
+        //ProLam will do it
     }
 }

@@ -6,15 +6,18 @@ import android.location.Geocoder
 import android.os.Build
 import androidx.annotation.RequiresApi
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.model.Coordinate
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import java.util.Locale
 import kotlin.coroutines.resume
 
-class GeocodingRepository(private val context: Context) {
+class GeocodingRepository(
+    private val context: Context,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) {
     suspend fun geocodePostcode(postcode: String): Coordinate? {
-        return withContext(Dispatchers.IO) {
+        return withContext(ioDispatcher) {
             try {
                 val geocoder = Geocoder(context, Locale.forLanguageTag("en-SG"))
                 val address = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -24,7 +27,7 @@ class GeocodingRepository(private val context: Context) {
                     geocoder.getFromLocationName(postcode, 1)?.firstOrNull()
                 }
                 address?.let { Coordinate(it.latitude, it.longitude) }
-            } catch (ex: Exception) {
+            } catch (_: Exception) {
                 null
             }
         }
