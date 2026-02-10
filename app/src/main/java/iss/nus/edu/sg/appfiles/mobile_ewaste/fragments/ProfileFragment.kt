@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import iss.nus.edu.sg.appfiles.mobile_ewaste.R
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.Adapter.RewardRedemptionAdapter
+import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.UseRedemptionRequestDto
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.SessionManager
 import iss.nus.edu.sg.appfiles.mobile_ewaste.databinding.FragmentProfileBinding
 import iss.nus.edu.sg.appfiles.mobile_ewaste.network.ApiClient
@@ -17,8 +18,8 @@ import kotlinx.coroutines.launch
 
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private var binding: FragmentProfileBinding? = null
-    private val redemptionAdapter = RewardRedemptionAdapter { item ->
-        onUseRedemption(item.redemptionId)
+    private val redemptionAdapter = RewardRedemptionAdapter { item, vendorCode ->
+        onUseRedemption(item, vendorCode)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,8 +58,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             toast("Please login first")
             return
         }
-        redemptionAdapter.setUserId(userId)
-
         fragmentBinding.redeemedLoading.visibility = View.VISIBLE
         fragmentBinding.redeemedEmpty.visibility = View.GONE
 
@@ -87,8 +86,32 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun onUseRedemption(redemptionId: Int) {
-        // No-op for now; UI already shows the code.
-        //ProLam will do it
+    private fun onUseRedemption(
+        item: iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.RewardRedemptionItemDto,
+        vendorCode: String
+    ) {
+        if (vendorCode != "0000") {
+            toast("Invalid vendor code")
+            return
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val response = ApiClient.ewasteApi.useRewardRedemption(
+                    UseRedemptionRequestDto(
+                        redemptionId = item.redemptionId,
+                        vendorCode = vendorCode
+                    )
+                )
+                if (response.success) {
+                    redemptionAdapter.markUsed(item.redemptionId)
+                    toast("Marked as used")
+                } else {
+                    toast(response.message)
+                }
+            } catch (_: Exception) {
+                toast("Failed to update redemption")
+            }
+        }
     }
 }
