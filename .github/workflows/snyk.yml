@@ -3,8 +3,6 @@ name: Snyk
 on:
   push:
     branches: ["main"]
-  pull_request:
-    branches: ["main"]
 
 permissions:
   contents: read
@@ -29,4 +27,10 @@ jobs:
       - name: Snyk Test
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: snyk test --all-sub-projects --severity-threshold=high
+        run: snyk test --all-sub-projects --severity-threshold=critical
+
+      - name: Snyk Monitor
+        if: github.ref == 'refs/heads/main'
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: snyk monitor --all-sub-projects

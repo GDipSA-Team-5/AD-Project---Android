@@ -2,7 +2,6 @@ package iss.nus.edu.sg.appfiles.mobile_ewaste.data.Adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.DisposalHistoryDto
 import iss.nus.edu.sg.appfiles.mobile_ewaste.databinding.FragmentItemDisposalHistoryBinding
