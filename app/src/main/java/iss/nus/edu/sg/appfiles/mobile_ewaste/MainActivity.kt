@@ -11,6 +11,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.SessionManager
 import iss.nus.edu.sg.appfiles.mobile_ewaste.navigation.SessionNavigationPolicy
+import iss.nus.edu.sg.appfiles.mobile_ewaste.network.ApiClient
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,6 +20,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         supportActionBar?.hide()
+
+        ApiClient.init(this)
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment

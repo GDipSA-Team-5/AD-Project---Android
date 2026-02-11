@@ -6,5 +6,7 @@ data class UserProfileDto (
     @SerializedName("userId") val userId: Int,
     @SerializedName("userName") val userName: String?,
     @SerializedName("email") val email: String?,
-    @SerializedName("phoneNumber") val phoneNumber: String?
+    @SerializedName("phoneNumber") val phoneNumber: String?,
+    @SerializedName("regionId") val regionId: Int?,
+    @SerializedName("regionName") val regionName: String?
 )
