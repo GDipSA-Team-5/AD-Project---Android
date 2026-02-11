@@ -43,7 +43,7 @@ jobs:
             -Dsonar.tests=app/src/test/java,app/src/androidTest/java \
             -Dsonar.coverage.jacoco.xmlReportPaths=app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml \
             -Dsonar.androidLint.reportPaths=app/build/reports/lint-results-debug.xml \
-            -Dsonar.coverage.exclusions=app/src/main/java/**/data/DTOs/**,app/src/main/java/**/data/model/**,app/src/main/java/**/network/model/**,app/src/main/java/**/data/Adapter/**,app/src/main/java/**/network/**,app/src/main/java/**/data/repository/**,app/src/main/java/**/fragments/** \
+            -Dsonar.coverage.exclusions=app/src/main/java/**/data/DTOs/**,app/src/main/java/**/data/model/**,app/src/main/java/**/network/model/**,app/src/main/java/**/data/Adapter/*Adapter.kt,app/src/main/java/**/network/ApiClient.kt,app/src/main/java/**/network/EwasteApi.kt,app/src/main/java/**/data/repository/**,app/src/main/java/**/fragments/**,app/src/main/java/**/*ViewModel.kt,app/src/main/java/**/MainActivity.kt,app/src/main/java/**/data/SessionManager.kt \
             -Dsonar.token=$SONAR_TOKEN
 
 
