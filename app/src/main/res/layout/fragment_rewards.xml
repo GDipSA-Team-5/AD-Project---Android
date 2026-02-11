@@ -207,6 +207,16 @@
                 android:layout_marginTop="12dp"
                 android:nestedScrollingEnabled="false" />
 
+            <TextView
+                android:id="@+id/rewardsHistoryEmpty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="No rewards history yet."
+                android:textColor="#6B7280"
+                android:textSize="15sp"
+                android:visibility="gone" />
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

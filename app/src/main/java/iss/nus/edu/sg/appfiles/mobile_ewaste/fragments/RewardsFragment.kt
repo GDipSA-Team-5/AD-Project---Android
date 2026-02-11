@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import iss.nus.edu.sg.appfiles.mobile_ewaste.R
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.Adapter.RewardsHistoryAdapter
@@ -14,7 +15,6 @@ import iss.nus.edu.sg.appfiles.mobile_ewaste.network.ApiClient
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.Locale
-import androidx.navigation.fragment.findNavController
 
 class RewardsFragment : Fragment(R.layout.fragment_rewards) {
 
@@ -61,11 +61,13 @@ class RewardsFragment : Fragment(R.layout.fragment_rewards) {
                 binding.textTotalReferrals.text = summary.totalReferrals.toString()
 
                 val history = ApiClient.ewasteApi.getRewardsHistory(userId)
-
                 adapter.submitList(history)
+                binding.rewardsHistoryEmpty.visibility =
+                    if (history.isEmpty()) View.VISIBLE else View.GONE
 
             } catch (e: Exception) {
                 e.printStackTrace()
+                binding.rewardsHistoryEmpty.visibility = View.VISIBLE
                 toast("Failed to load rewards: ${e.message}")
             }
         }

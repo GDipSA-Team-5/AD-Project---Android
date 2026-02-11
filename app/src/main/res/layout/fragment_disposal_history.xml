@@ -126,29 +126,32 @@
                     android:id="@+id/chipAll"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:checkable="true"
                     android:checked="true"
                     android:text="All"
-                    app:chipBackgroundColor="@color/brand_green"
+                    app:chipBackgroundColor="@color/disposal_history_chip_bg"
                     app:chipStrokeWidth="0dp"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="@color/disposal_history_chip_text" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipThisMonth"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:checkable="true"
                     android:text="This Month"
-                    app:chipBackgroundColor="#F3F4F6"
-                    android:textColor="#374151" />
+                    app:chipBackgroundColor="@color/disposal_history_chip_bg"
+                    android:textColor="@color/disposal_history_chip_text" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipLast3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:checkable="true"
                     android:text="Last 3 Months"
-                    app:chipBackgroundColor="#F3F4F6"
-                    android:textColor="#374151" />
+                    app:chipBackgroundColor="@color/disposal_history_chip_bg"
+                    android:textColor="@color/disposal_history_chip_text" />
             </com.google.android.material.chip.ChipGroup>
 
             <androidx.recyclerview.widget.RecyclerView
