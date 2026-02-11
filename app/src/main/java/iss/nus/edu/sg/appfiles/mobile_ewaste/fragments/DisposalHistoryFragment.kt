@@ -28,9 +28,13 @@ class DisposalHistoryFragment : Fragment(R.layout.fragment_disposal_history) {
 
         loadHistory("all")
 
-        binding.chipAll.setOnClickListener { loadHistory("all") }
-        binding.chipThisMonth.setOnClickListener { loadHistory("month") }
-        binding.chipLast3.setOnClickListener { loadHistory("last3") }
+        binding.filterChips.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.chipThisMonth -> loadHistory("month")
+                R.id.chipLast3 -> loadHistory("last3")
+                else -> loadHistory("all")
+            }
+        }
     }
 
     private fun loadHistory(range: String) {
