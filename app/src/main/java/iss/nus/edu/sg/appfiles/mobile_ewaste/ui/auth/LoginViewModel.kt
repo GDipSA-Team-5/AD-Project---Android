@@ -29,7 +29,7 @@ class LoginViewModel : ViewModel() {
                 val response = authRepository.login(LoginRequest(email = email, password = password))
                 _state.update { it.copy(isLoading = false) }
                 if (response.success) {
-                    _events.trySend(LoginEvent.Success(response.userId))
+                    _events.trySend(LoginEvent.Success(response.userId, response.token))
                 } else {
                     _events.trySend(LoginEvent.Error(response.message))
                 }
@@ -46,6 +46,6 @@ data class AuthUiState(
 )
 
 sealed class LoginEvent {
-    data class Success(val userId: Int?) : LoginEvent()
+    data class Success(val userId: Int?, val token: String?) : LoginEvent()
     data class Error(val message: String) : LoginEvent()
 }

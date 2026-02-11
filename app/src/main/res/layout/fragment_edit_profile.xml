@@ -52,21 +52,19 @@
             android:inputType="phone"
             android:text="@string/hint_phone"/>
 
-        <!-- Address -->
+        <!-- Region -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/address"
+            android:text="@string/region"
             android:textColor="#777777"
             android:layout_marginTop="16dp"/>
 
-        <EditText
-            android:id="@+id/etAddress"
+        <Spinner
+            android:id="@+id/spinnerRegion"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:background="@drawable/bg_input"
-            android:padding="16dp"
-            android:inputType="textPostalAddress"
-            android:text="@string/hint_address"/>
+            android:padding="12dp"/>
     </LinearLayout>
 </ScrollView>

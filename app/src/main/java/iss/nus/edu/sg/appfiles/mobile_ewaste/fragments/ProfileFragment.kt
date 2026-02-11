@@ -58,6 +58,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             toast("Please login first")
             return
         }
+        val session = SessionManager(requireContext())
         fragmentBinding.redeemedLoading.visibility = View.VISIBLE
         fragmentBinding.redeemedEmpty.visibility = View.GONE
 
@@ -66,6 +67,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 val profile = ApiClient.ewasteApi.getUser(userId)
                 fragmentBinding.profileName.text = profile.userName ?: "User"
                 fragmentBinding.profileEmail.text = profile.email ?: "-"
+                fragmentBinding.tvPhone.text = profile.phoneNumber ?: "-"
+                fragmentBinding.tvAddress.text = profile.regionName ?: "-"
+                session.saveProfile(profile.phoneNumber, profile.regionId, profile.regionName)
 
 
                 val redemptions = ApiClient.ewasteApi.getRewardRedemptions(userId)

@@ -15,6 +15,7 @@ import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.RewardsSummaryDto
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.UserProfileDto
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.UseRedemptionRequestDto
 import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.UseRedemptionResponseDto
+import iss.nus.edu.sg.appfiles.mobile_ewaste.data.DTOs.UpdateProfileRequestDto
 import iss.nus.edu.sg.appfiles.mobile_ewaste.network.model.LoginRequest
 import iss.nus.edu.sg.appfiles.mobile_ewaste.network.model.LoginResponse
 import iss.nus.edu.sg.appfiles.mobile_ewaste.network.model.RegionDto
@@ -23,6 +24,7 @@ import iss.nus.edu.sg.appfiles.mobile_ewaste.network.model.RegisterResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Query
 
 interface EwasteApi {
@@ -37,6 +39,9 @@ interface EwasteApi {
 
     @GET("api/auth/profile")
     suspend fun  getUser(@Query("userId")userId: Int): UserProfileDto
+
+    @PUT("api/auth/profile")
+    suspend fun updateProfile(@Body request: UpdateProfileRequestDto): UserProfileDto
 
     @GET("api/lookup/bins")
     suspend fun getBins(): List<BinDto>

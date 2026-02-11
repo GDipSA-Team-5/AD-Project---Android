@@ -70,7 +70,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     viewModel.events.collect { event ->
                         when (event) {
                             is LoginEvent.Success -> {
-                                SessionManager(requireContext()).saveLogin(event.userId)
+                                SessionManager(requireContext()).saveLogin(event.userId, event.token)
                                 Toast.makeText(requireContext(), "Logged in", Toast.LENGTH_SHORT).show()
                                 val options = NavOptions.Builder()
                                     .setPopUpTo(R.id.loginFragment, true) // inclusive = true
