@@ -39,6 +39,7 @@ jobs:
         run: |
             ./gradlew :app:sonar \
             -Dsonar.projectBaseDir=$GITHUB_WORKSPACE \
+            -Dsonar.projectName=AD-Project---Android \
             -Dsonar.sources=app/src/main/java \
             -Dsonar.tests=app/src/test/java,app/src/androidTest/java \
             -Dsonar.coverage.jacoco.xmlReportPaths=app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml \
